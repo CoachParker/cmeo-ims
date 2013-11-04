@@ -83,7 +83,9 @@
                                 //'data'=>array('eventTypeId'=>'js:this.value'), 
                             //leave out the data key to pass all form values through
                         ))); 
-                    //moved attribute values to their own div
+                    //empty since it will be filled by the other dropdown
+                    //echo CHtml::dropDownList('personId','', array()); 
+                    //moved person to its own div
                     ?>
 		<?php echo $form->error($model,'entityId'); ?>
         </div>

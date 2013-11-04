@@ -220,14 +220,16 @@ class EventController extends Controller
                     {
                     echo CHtml::activeTextField(
                     EventAttributeValue::model(),// not sure about this
-                            $attibute->,
-                            array('value'=>$attribute->idEventAttribute, 
+                            'value',
+                            array('placeholder'=>$attribute->displayName,
                                 'id'=>$attribute->idEventAttribute, 
-                                'name'=>'Event[attributeValues][]'),
-                            '<span class="custom checkbox"></span>' . 
-                            CHtml::encode($attribute->displayName),
+                                'name'=>'EventAttributeValue[value][]'),
                             true);
+                    
                     }
+             }
+             else{
+                 echo '<input type="text" placeholder="No additional attributes">';
              }
           }catch(Exception $e){
                  echo $e->getMessage();

@@ -13,7 +13,7 @@ class AjaxController extends Controller{
     
     
     public function actionHtml(){
-        echo '<p>Here <em>Gary</em> issttempting to understand how to use
+        echo '<p>Here <em>Gary</em> is attempting to understand how to use
             java script and ajax with the yii framework, with the help
             of a wonderful text by Larry Ullman, <span style="text-decoration: 
             underline;">The Yii Book</span>.</p>';
