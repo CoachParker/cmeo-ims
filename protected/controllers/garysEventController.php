@@ -51,7 +51,7 @@ class EventController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view2',array(
+		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -69,17 +69,24 @@ class EventController extends Controller
 
 		if(isset($_POST['Event']))
 		{
-			$attr = $_POST['Event']['attributes'];
 			$model->attributes=$_POST['Event'];
-			if($model->save()) {
-				$this->addAttributes($attr, $model);
+			if($model->save())
+                        {
+                            // 2013-11-04 added loop, doesn't save
+                            foreach ($_POST['EventAttributeValue']['value'] as $value)
+                            {
+                                $eventValues = new EventAttributeValue;
+                                $eventValues->eventId = $model->idEvent;
+                                $eventValues->eventAttributeId = $_POST['EventAttributeValue']['eventAttributeId'];
+                                $eventValues->value = $value;
+                            }
 				$this->redirect(array('view','id'=>$model->idEvent));
-			}
-		} else {
-			$this->render('create',array(
-				'model'=>$model,
-			));
+                        }
 		}
+
+		$this->render('create',array(
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -162,36 +169,6 @@ class EventController extends Controller
 	}
 
 	/**
-	 * Ensures the attributes input are valid for the event type, and then (optionally validates data and) adds them to the event
-	 * @param array $attr the attributes input, an array keyed by eventAttributeId containing the value for the event attribute in the EAV table
-	 * @param Event $event the event object to augment
-	 * @return Boolean was the process successful?
-         * Devin 2013-11-05
-	 */
-	public function addAttributes($attr, $event)
-	{
-		$attributes = $event->eventType->eventAttributes;
-		$allowed = array();
-		foreach ($attributes as $attribute){
-			$allowed[] = $attribute->idEventAttribute;
-		}
-		foreach (array_keys($attr) as $id){
-			if (in_array($id, $allowed)){
-				// later also get the value type from the event attribute and validate input data to that defined type
-				// also needs error checking and handling
-				$eav = new EventAttributeValue();
-				$eav->eventId = $event->idEvent;
-				$eav->eventAttributeId = $id;
-				$eav->value = $attr[$id];
-				$eav->save();
-			} else {
-				//Possible hacking attempt
-			}
-		}
-		return true;
-	}
-	
-	/**
 	 * Performs the AJAX validation.
 	 * @param Event $model the model to be validated
 	 */
@@ -258,24 +235,20 @@ class EventController extends Controller
 
             $eventTypeAttributes = $eventType->eventAttributes;
             if($eventTypeAttributes) {
-                // code from Devin 2013-11-05
-                echo '<form action="get">';
+                
                 foreach($eventTypeAttributes as $attribute)
                     {
-                    echo CHtml::tag(
-                            'label',
-                            array('for'=>'eventattr'.$attribute->idEventAttribute),
-                            CHtml::encode($attribute->displayName),
-                            true);
                     echo CHtml::activeTextField(
-                            EventAttributeValue::model(),// not sure about this
+                    EventAttributeValue::model(),// not sure about this
                             'value',
                             array('placeholder'=>$attribute->displayName,
-                                'id'=>'eventattr'.$attribute->idEventAttribute, 
-                                'name'=>'Event[attributes]['.$attribute->idEventAttribute.']'),
+                                'id'=>'EventAttributeValue_value', 
+                                'name'=>'EventAttributeValue[value][]'),
                             true);
+                    echo Chtml::hiddenField(
+                            'EventAttributeValue[eventAttributeId]', 
+                            $attribute->idEventAttribute);
                     }
-                    echo '</form>';
              }
              else{
                  echo '<input type="text" placeholder="No additional attributes">';

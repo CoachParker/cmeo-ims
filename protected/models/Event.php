@@ -53,6 +53,12 @@ class Event extends CActiveRecord
 			array('idEvent, name, eventDate, endDate, recurrence, classLimit, description, ageGroupId, eventTypeId, notes, sponsorEntityId, facilitatorPersonId', 'safe', 'on'=>'search'),
 		);
 	}
+        
+        public function behaviors() {
+            return array( 'CAdvancedArBehavior' => array(
+            'class' => 'CAdvancedArBehavior'));
+        }
+        
 
 	/**
 	 * @return array relational rules.
@@ -157,5 +163,43 @@ class Event extends CActiveRecord
 	      }
               return implode(" ",$result);
 	}
+/*  Get attributes related to eventType 
+ * 
+ */
+        public function getAttribtuteList()
+        {
+            $result=array();
+            If ($this->attributeValues){
+                foreach ($this->attributeValues as $attribute){
+                    $result[] = CHtml::encode($attribute->eventAttributeId) . ":" . CHtml::encode($attribute->value);
+                }
+            }
+            else{
+                $result[] = "No additional attributes";
+            }
+        return implode(", ",$result);
+        }
 
-}
+/*
+ * Devin's code for viewing attributes and values
+ * 2013-11-05
+ */     
+        public function getAttributesValues()
+        {
+            $descriptions = array();
+            $attributes = array();
+            foreach($this->eventType->eventAttributes as $attr){
+                $descriptions[$attr->idEventAttribute] = $attr->displayName;
+                
+            }
+            foreach($this->attributeValues as $attr){
+                $id = $attr->eventAttributeId;
+                $value = $attr->value;
+                if ($descriptions[$id]){
+                    $attributes[] = array( 'label' => $descriptions[$id], 'value' => $value);
+                    
+                }       
+                }	
+                return $attributes;
+        }
+            }

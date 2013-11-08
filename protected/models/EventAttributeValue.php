@@ -29,6 +29,7 @@ class EventAttributeValue extends CActiveRecord
 			array('eventId, eventAttributeId', 'required'),
 			array('eventId, eventAttributeId', 'numerical', 'integerOnly'=>true),
 			array('value', 'length', 'max'=>45),
+                        array('events, attribtes, value', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('eventId, eventAttributeId, value', 'safe', 'on'=>'search'),

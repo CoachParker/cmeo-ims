@@ -18,9 +18,23 @@ $this->menu=array(
 
 <h1>View Event #<?php echo $model->idEvent; ?></h1>
 
+<?php 
+$descriptions = array();
+$attributes = array();
+foreach($model->eventType->eventAttributes as $attr){
+	$descriptions[$attr->idEventAttribute] = $attr->displayName;
+}
+foreach($model->attributeValues as $attr){
+	$id = $attr->eventAttributeId;
+	$value = $attr->value;
+	if ($descriptions[$id]){
+		$attributes[] = array( 'label' => $descriptions[$id], 'value' => $value);
+	}
+}	
+?>
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
-	'attributes'=>array(
+	'attributes'=> array_merge( array(
 		'idEvent',
 		'name',
 		'eventDate',
@@ -36,23 +50,18 @@ $this->menu=array(
                     'label' => 'Event Type',
                     'value' => $model->eventType->displayName,
                 ),
-                array(
-                    'label' => 'Attributes',
-                    'value' => $model->getAttribtuteList(),
-                    'type'  => 'raw'
-                ),
 		'notes',
                 array(
                     'label' => 'Sponsoring Entity',
-                    'value' => $model->sponsorEntity->name,
+                    'value' => $model->sponsorEntity ? $model->sponsorEntity->name: "",
                 ),
                 //array('label'=>'person.firstName', 'value'=>$model->facilitatorPerson->firstName." ".$model->facilitatorPerson->lastName),
                 array(
                 'label' => 'Facilitator',
                 'value' => $model->getPerson(),
 		'type'  => 'raw'
-                ),
-                $model->getAttributesValues(),	
-	),
-    
+				),
+				array()
+		
+	), $attributes),
 )); ?>
