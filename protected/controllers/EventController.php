@@ -247,33 +247,58 @@ class EventController extends Controller
        public function actionAttributeTextBoxes($id = null)
        {
           try{
-            if(is_null($id))
-                
-                $id = $_POST['Event']['eventTypeId'];
+            
+              //Yii::trace(print_r($_POST, 1));
+              if(is_null($id))
+                if ( isset($_POST['Event']) && isset($_POST['Event']['eventTypeId']) ) $id = $_POST['Event']['eventTypeId'];
+                else {echo "Missing ID <br /><pre>".print_r($_POST, 1)."</pre>"; return;}
+            
+            $idevent = null;
+            if( isset($_GET['idEvent']) && $_GET['idEvent'] != null){
+                // !!! needs sanitization
+                $idevent =$_GET['idEvent'];
+                $event = Event::model()->findByPk($idevent);
+                $attributesValues = array();
+                foreach($event->attributeValues as $attr){
+                    $id = $attr->eventAttributeId;
+                    $value = $attr->value;
+                    $attributeValues[$id]=$value;
+                }
+            }
             
             $eventType = EventType::model()->findByPk($id);
             
             if(is_null($eventType) )
                 echo 'There are no additional attributes setup for that type of event.';
-
+            
             $eventTypeAttributes = $eventType->eventAttributes;
             if($eventTypeAttributes) {
                 // code from Devin 2013-11-05
                 echo '<form action="get">';
                 foreach($eventTypeAttributes as $attribute)
                     {
+                    $inputValues = array(
+                        'id'=>'eventattr'.$attribute->idEventAttribute,
+                        'name'=>'Event[attributes]['.$attribute->idEventAttribute.']');
+                    if($idevent){
+                        $inputValues['value']=$attributeValues[$attribute->idEventAttribute];
+                    }
                     echo CHtml::tag(
                             'label',
                             array('for'=>'eventattr'.$attribute->idEventAttribute),
                             CHtml::encode($attribute->displayName),
                             true);
-                    echo CHtml::activeTextField(
+                    echo CHtml::tag(
+                            'input',
+                            $inputValues
+                            );
+                 /*   echo CHtml::activeTextField(
                             EventAttributeValue::model(),// not sure about this
                             'value',
                             array('placeholder'=>$attribute->displayName,
                                 'id'=>'eventattr'.$attribute->idEventAttribute, 
                                 'name'=>'Event[attributes]['.$attribute->idEventAttribute.']'),
-                            true);
+                            true); */
                     }
                     echo '</form>';
              }

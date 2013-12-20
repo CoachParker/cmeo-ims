@@ -16,11 +16,23 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'entityId'); ?>
-		<?php echo $form->textField($model,'entityId'); ?>
-		<?php echo $form->error($model,'entityId'); ?>
+		<?php //echo $form->labelEx($model,'entityId'); ?>
+		<?php //echo $form->textField($model,'entity'); ?>
+		<?php //echo $form->error($model,'entityId'); ?>
 	</div>
-
+        
+	<div class="row">
+		<?php echo $form->labelEx($model,'entity'); ?>
+		<?php //echo $form->checkBoxList($model,'entities',CHtml::listData(Entity::model()->findAll(), 'ID', 'Name'),array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))); ?>
+		<?php echo $form->dropDownList(
+                        $model,
+                        'entity',
+                        CHtml::listData(Entity::model()->findAll(), 'idEntity', 'name'),
+                        array('prompt' => 'Select a Group', 'multiple' => 'multiple')
+                        ); ?>
+		<?php echo $form->error($model,'entity'); ?>
+	</div>
+        
 	<div class="row">
 		<?php echo $form->labelEx($model,'donationDate'); ?>
 		<?php echo $form->textField($model,'donationDate'); ?>
@@ -34,11 +46,23 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'donationReasonId'); ?>
-		<?php echo $form->textField($model,'donationReasonId'); ?>
-		<?php echo $form->error($model,'donationReasonId'); ?>
+		<?php //echo $form->labelEx($model,'donationReasonId'); ?>
+		<?php //echo $form->textField($model,'donationReasonId'); ?>
+		<?php //echo $form->error($model,'donationReasonId'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'donationReason'); ?>
+		<?php echo $form->radioButtonList(
+                        $model,
+                        'donationReason',
+                        CHtml::listData(DonationReason::model()->findAll(), 'idDonationReason', 'name'),
+                        array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))
+                        ); ?>
+		<?php //echo $form->textField($model,'personTypeId'); ?>
+		<?php echo $form->error($model,'donationReason'); ?>
+	</div>
+        
 	<div class="row">
 		<?php echo $form->labelEx($model,'isThanked'); ?>
 		<?php echo $form->textField($model,'isThanked'); ?>

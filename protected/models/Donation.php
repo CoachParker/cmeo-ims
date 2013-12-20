@@ -15,6 +15,7 @@
  * The followings are the available model relations:
  * @property Entity $entity
  * @property DonationReason $donationReason
+ * @property Person $personContact
  */
 class Donation extends CActiveRecord
 {
@@ -64,6 +65,7 @@ class Donation extends CActiveRecord
 		return array(
 			'entity' => array(self::BELONGS_TO, 'Entity', 'entityId'),
 			'donationReason' => array(self::BELONGS_TO, 'DonationReason', 'donationReasonId'),
+                        'personContact' => array(self::BELONGS_TO, 'Person', 'contactPerson'),
 		);
 	}
 

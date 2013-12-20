@@ -75,14 +75,15 @@
                         CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName'),
                         array(
                             'prompt' => 'Select an Event Type',
-                            'ajax' => array(
+                        /*    'ajax' => array(
                                 'type'=>'POST', //request type
                                 //'url'=>$this->createUrl('dynamicPeople'), //url to call.
-                                'url'=>Yii::app()->createUrl('event/attributeTextBoxes'), //url to call.
+                                'url'=>Yii::app()->createUrl('event/attributeTextBoxes')."?idEvent=".$model->idEvent, //url to call.
                                 'update'=>'#Event_attributeValues', //selector to update
                                 //'data'=>array('eventTypeId'=>'js:this.value'), 
                             //leave out the data key to pass all form values through
-                        ))); 
+                        )*/
+                            )); 
                     //moved attribute values to their own div
                     ?>
 		<?php echo $form->error($model,'entityId'); ?>
@@ -125,5 +126,35 @@
 	</div>
 
 <?php $this->endWidget(); ?>
+
+<?php  
+//Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+Yii::app()->clientScript->registerScript('dynamic-typefields', "
+
+jQuery('body').on('change','#Event_eventTypeId', function(){updateEventTypeFields(this);} );
+
+function updateEventTypeFields(elem){
+	jQuery.ajax({
+		'type':'POST',
+		'url':'".Yii::app()->createUrl('event/attributeTextBoxes')."',
+		'cache':false,
+		'data': jQuery(elem).parents('form').serialize(),
+		'success': function(html){
+			jQuery('#Event_attributeValues').html(html)
+		}
+	});
+	return false;
+}
+
+var \$typeSel = $('#Event_eventTypeId');
+if ( \$typeSel.attr('value') != ''){
+	updateEventTypeFields(\$typeSel);
+}
+"
+//".Yii::app()->createUrl('event/attributeTextBoxes')."
+);
+?>
+      
+        
 
 </div><!-- form -->

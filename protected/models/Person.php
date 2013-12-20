@@ -15,8 +15,11 @@
  * @property integer $doNotContact
  *
  * The followings are the available model relations:
- * @property EntityPerson[] $entityPeople
+ * @property EntityPerson[] $entities
  * @property PersonType $personType
+ * @property Visit[] $visits
+ * @property Event[] $events
+ * @property Donation $donorContact
  */
 class Person extends CActiveRecord
 {
@@ -76,6 +79,7 @@ class Person extends CActiveRecord
 			'personType' => array(self::BELONGS_TO, 'PersonType', 'personTypeId'),
 			'visits' => array(self::MANY_MANY, 'Visit', 'visit_has_person(person_idPerson, visit_idVisit)'),
                     'events' => array(self::HAS_MANY, 'Event','facilitatorPersonId'),
+                    'donorContact' => array(self::HAS_MANY, 'Donation', 'contactPerson'),
 		);
 	}
 
