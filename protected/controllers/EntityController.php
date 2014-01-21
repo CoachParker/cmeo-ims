@@ -27,21 +27,24 @@ class EntityController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+			array('allow',  // allow all users to perform no actions
 				'actions'=>array(''),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(''),
+			array('allow', // allow authenticated user with role to perform most actions
+			      'actions'=>array('index','view','create','update','admin','register','register2'),
 				'users'=>array('@'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator") ||
+				($user->type==="reception"))',
 			),
-                    array('allow', // allow authenticated user bob to perform 'create' and 'update' actions
-				'actions'=>array('index','view',),
-				'users'=>array('bob'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view','create','update','admin','delete'),
-				'users'=>array('admin'),
+			array('allow', // allow admin and coordinator roles to perform 'delete' action
+				'actions'=>array('delete'),
+				'users'=>array('@'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator"))',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -174,4 +177,71 @@ class EntityController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+   /*
+    * Attempting a form with multiple models
+    * Gary 2014-01-08
+    */     
+        public function actionRegister()
+                {
+                        var_dump( $_POST ); 
+            $form = new CForm('application.views.entity.registerForm');
+            $form['entity']->model = new Entity;
+            $form['person']->model = new Person;
+            if($form->submitted('register') && $form->validate())
+                {
+                $entity = $form['entity']->model;
+                $person = $form['person']->model;
+                if($entity->save(false))
+                    {
+                    // this lead to error "Indirect modification of overloaded property Person::$entities has no effect"
+                    //$person->entities->entityId = $entity->idEntity;
+                    // this lead to error "Object of class Entity could not be converted to int"
+                    //$person->entities=Entity::model()->findByPk($entity->idEntity);
+                    // finally! this works with CAdvandcedArBehavior
+                    $person->entities=$entity->idEntity;
+                    $person->save(false);
+                    $this->redirect(array('view','id'=>$entity->idEntity));
+                    }   
+                 }
+                    $this->render('register', array('form'=>$form));
+                    
+                 }
+
+   /*
+    * Attempting a form with multiple models
+    * CActiveForm
+    * Gary 2014-01-13
+    */     
+        public function actionRegister2()
+                {
+            var_dump( $_POST ); 
+            $entityModel = new Entity;
+            $personModel = new Person;
+            if(isset($_POST['Entity']))
+                {
+                $entityModel->attributes=$_POST['Entity'];
+                /*
+                $entity = $entityModel;
+                $person = $personModel;
+                if($entityModel->save(false))
+                    {
+                    // finally! this works with CAdvandcedArBehavior
+                    //$person->entities=$entity->idEntity;
+                    // Need to loop through the extra people from jqrelcopy, but not sure how yet 2014-01-13
+                    foreach ($person->id as $personi)
+                    {
+                        $personi->entities=$entity->idEntity;
+                        $personi->save(false);
+                    }
+                    //$person->save(false);
+                    $this->redirect(array('view','id'=>$entity->idEntity));
+                    }   */
+                 }
+	    $this->render('register2', array('entity'=>$entityModel,
+					     'person'=>$personModel,));
+                    
+                 }
+
+      
 }

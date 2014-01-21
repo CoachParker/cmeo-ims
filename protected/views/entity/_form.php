@@ -39,11 +39,20 @@
                 //CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName'),
                 //array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))); 
                 ?>
-		<?php echo $form->dropDownList(
-                        $model,
-                        'people',
-                        CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName', 'lastName'),
-                        array('prompt' => 'Select People', 'multiple' => 'multiple')); ?>
+		<?php //echo $form->dropDownList(
+                        //$model,
+                        //'people',
+                        //CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName', 'lastName'),
+                        //array('prompt' => 'Select People', 'multiple' => 'multiple')); ?>
+                <?php $this->widget('ext.select2.ESelect2',array(
+                     'model'=>$model,  
+                     'attribute'=>'people',
+                     'data'=>CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName', 'lastName'),
+                     'options'=>array(
+                         'width'        => '100%',
+                         'placeholder'  => 'Type a name'
+                     ),
+                     )); ?>
 		<?php echo $form->error($model,'people'); ?>
 	</div>
         

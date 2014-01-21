@@ -27,17 +27,17 @@ class EventController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+			array('allow',  // allow all users to perform no actions
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+			array('allow', // allow authenticated user with role to perform all actions
+				'actions'=>array('index','view','create','update','admin','delete','attributetextboxes'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','dynamicattributescheck','attributetextboxes'),
-				'users'=>array('admin'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator") ||
+				($user->type==="reception"))',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

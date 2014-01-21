@@ -19,11 +19,13 @@ $this->menu=array(
 <h1>View Event #<?php echo $model->idEvent; ?></h1>
 
 <?php 
-$descriptions = array();
+$descriptions = array(); // for attribute names
 $attributes = array();
+// get attribute names based on EventType, EventAttribute
 foreach($model->eventType->eventAttributes as $attr){
 	$descriptions[$attr->idEventAttribute] = $attr->displayName;
 }
+// get attribute values from eventAttributeValue table
 foreach($model->attributeValues as $attr){
 	$id = $attr->eventAttributeId;
 	$value = $attr->value;

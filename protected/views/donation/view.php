@@ -22,10 +22,22 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'idDonation',
-		'entityId',
+                array(
+                    'label' => 'Entity',
+                    'value' => $model->entity->name,
+                ),
 		'donationDate',
 		'amount',
-		'donationReasonId',
+                array(
+                    'label' => 'Donation Reason',
+                    'value' => $model->donationReason->name,
+                ),
+                array(
+                    'label' => 'Contact Person',
+                    'value' => CHtml::link(CHtml::encode($model->personContact->firstName . " " . $model->personContact->lastName),
+                            array('person/view','id'=>$model->contactPerson)),
+                    'type'  => 'raw',
+                ),
 		'isThanked',
 		'comments',
 	),

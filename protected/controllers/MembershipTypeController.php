@@ -34,10 +34,17 @@ class MembershipTypeController extends Controller
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
 				'users'=>array('@'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator") ||
+				($user->type==="reception"))',
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				'users'=>array('@'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator"))',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

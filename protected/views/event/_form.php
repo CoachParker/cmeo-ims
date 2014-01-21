@@ -15,6 +15,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
+    <div class="panel">
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
@@ -156,5 +157,5 @@ if ( \$typeSel.attr('value') != ''){
 ?>
       
         
-
+    </div>
 </div><!-- form -->

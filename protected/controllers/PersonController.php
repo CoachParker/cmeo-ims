@@ -27,21 +27,24 @@ class PersonController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
+			array('allow',  // allow all users to perform no actions
 				'actions'=>array(''),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(''),
+				'actions'=>array('index','view','create','update','admin'),
 				'users'=>array('@'),
-			),
-			array('allow', // allow authenticated user bob to perform 'create' and 'update' actions
-				'actions'=>array('index','view',),
-				'users'=>array('bob'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator") ||
+				($user->type==="reception"))',
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','view','create','update','admin','delete'),
-				'users'=>array('admin'),
+				'actions'=>array('delete'),
+				'users'=>array('@'),
+				'expression'=>'isset($user->type) && 
+				(($user->type==="admin") || 
+				($user->type==="coordinator"))',
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -175,4 +178,35 @@ class PersonController extends Controller
 			Yii::app()->end();
 		}
 	}
+        
+        
+                 /*
+                  * This cam from the Yii Guide, Collecting Tabular Input
+                  * I don't need to do a batch update, but a batch create
+                  */
+/*                public function actionBatchUpdate()
+                {
+                // retrieve items to be updated in a batch mode
+                // assuming each item is of model class 'Item'
+                    
+                    $items=$this->getItemsToUpdate();
+                    if(isset($_POST['Person']))
+                        {
+                        $valid=true;
+                        foreach($items as $i=>$item)
+                            {
+                            if(isset($_POST['Person'][$i]))
+                                {
+                                $item->attributes=$_POST['Person'][$i];
+                                }
+                            $valid=$item->validate() && $valid;
+                            }
+                            if($valid)  // all items are valid
+                            //  ...do something here
+                        }
+                        // displays the view to collect tabular input
+                    $this->render('batchUpdate',array('items'=>$items));
+                }  
+                */
+        
 }

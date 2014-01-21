@@ -63,7 +63,7 @@ class Person extends CActiveRecord
         
         public function behaviors() {
             return array( 'CAdvancedArBehavior' => array(
-            'class' => 'CAdvancedArBehavior'));
+            'class' => 'application.extensions.CAdvancedArBehavior'));
         }
         
 	/**
@@ -80,6 +80,7 @@ class Person extends CActiveRecord
 			'visits' => array(self::MANY_MANY, 'Visit', 'visit_has_person(person_idPerson, visit_idVisit)'),
                     'events' => array(self::HAS_MANY, 'Event','facilitatorPersonId'),
                     'donorContact' => array(self::HAS_MANY, 'Donation', 'contactPerson'),
+                    'user' => array(self::HAS_ONE, 'User', 'personId'),
 		);
 	}
 

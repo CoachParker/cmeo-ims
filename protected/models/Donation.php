@@ -9,6 +9,7 @@
  * @property string $donationDate
  * @property string $amount
  * @property integer $donationReasonId
+ * @property integer $contactPerson
  * @property integer $isThanked
  * @property string $comments
  *
@@ -46,9 +47,9 @@ class Donation extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('entityId, donationDate, amount, donationReasonId', 'required'),
-			array('entityId, donationReasonId, isThanked', 'numerical', 'integerOnly'=>true),
+			array('entityId, donationReasonId, contactPerson, isThanked', 'numerical', 'integerOnly'=>true),
 			array('amount', 'length', 'max'=>10),
-			array('comments', 'safe'),
+			array('comments, entity', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('idDonation, entityId, donationDate, amount, donationReasonId, isThanked, comments', 'safe', 'on'=>'search'),
@@ -80,6 +81,7 @@ class Donation extends CActiveRecord
 			'donationDate' => 'Donation Date',
 			'amount' => 'Amount',
 			'donationReasonId' => 'Donation Reason',
+                        'contactPerson' => 'Contact Person',
 			'isThanked' => 'Is Thanked',
 			'comments' => 'Comments',
 		);
@@ -98,6 +100,7 @@ class Donation extends CActiveRecord
 
 		$criteria->compare('idDonation',$this->idDonation);
 		$criteria->compare('entityId',$this->entityId);
+		$criteria->compare('contactPerson',$this->contactPerson);
 		$criteria->compare('donationDate',$this->donationDate,true);
 		$criteria->compare('amount',$this->amount,true);
 		$criteria->compare('donationReasonId',$this->donationReasonId);

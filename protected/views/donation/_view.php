@@ -10,7 +10,7 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('entityId')); ?>:</b>
-	<?php echo CHtml::encode($data->entityId); ?>
+	<?php echo CHtml::encode($data->entity->name); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('donationDate')); ?>:</b>
@@ -22,7 +22,11 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('donationReasonId')); ?>:</b>
-	<?php echo CHtml::encode($data->donationReasonId); ?>
+	<?php echo CHtml::encode($data->donationReason->name); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('contactPerson')); ?>:</b>
+	<?php echo CHtml::encode($data->personContact->firstName); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('isThanked')); ?>:</b>

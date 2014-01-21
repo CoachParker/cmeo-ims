@@ -8,7 +8,7 @@ $this->pageTitle=Yii::app()->name;
 
 <p>Welcome to the Children's Museum of Eastern Oregon Information Management System.</p>
 
-<p>If you are a registered user then please proceed to the login page, otherwise
+<p>If you are a registered user then please proceed to the <a href="site/login" class="tiny button round">login</a> page, otherwise
     please return to our <a href="http://cmeo.org/" target="_blank">visitor's site</a>.</p>
 
 <!--
@@ -20,7 +20,3 @@ $this->pageTitle=Yii::app()->name;
 	<li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
 </ul>
 -->
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>

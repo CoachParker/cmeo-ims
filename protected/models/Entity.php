@@ -52,6 +52,7 @@ class Entity extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, entityTypeId', 'required'),
+                    array('name', 'unique'),
 			array('entityTypeId', 'numerical', 'integerOnly'=>true),
 			array('name, city', 'length', 'max'=>45),
 			array('address1, address2', 'length', 'max'=>80),
@@ -70,7 +71,7 @@ class Entity extends CActiveRecord
          */
         public function behaviors() {
             return array( 'CAdvancedArBehavior' => array(
-            'class' => 'CAdvancedArBehavior'));
+            'class' => 'application.extensions.CAdvancedArBehavior'));
         }
 	/**
 	 * @return array relational rules.

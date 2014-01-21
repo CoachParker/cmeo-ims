@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	'Entities'=>array('index'),
-	'Create',
+	'Register New Family',
 );
 
 $this->menu=array(
