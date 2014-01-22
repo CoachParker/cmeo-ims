@@ -47,10 +47,12 @@
 			'itemOptions'=>array('class'=>'has-dropdown'), 
 			'submenuOptions'=>array('class'=>'dropdown'),
 			'items'=>array(
+                                array('label'=>'Register Family', 'url'=>array('/entity/register')),
 				array('label'=>'People', 'url'=>array('/person/index')),
 				array('label'=>'Entities', 'url'=>array('/entity/')),
 				array('label'=>'Visit', 'url'=>array('/visit/')),
 				array('label'=>'Event', 'url'=>array('/event/')),
+				array('label'=>'Donation', 'url'=>array('/Donation/')),
 				array('label'=>'Membership', 'url'=>array('/membership/')),
 			),
 		),
@@ -67,8 +69,11 @@
 	</nav>
 	
 	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
+		<?php //$this->widget('zii.widgets.CBreadcrumbs', array(
+			$this->widget('application.extensions.FoundBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
+                            // interesting, if this separator isn't empty then the new seperator is listed after the breadcrumbs
+                            // e.g. 'separator'=>'&gt;'  you get Home / Person / Create  > > 
 			'separator'=>'',
 		)); ?>
 	<?php endif?>
@@ -79,7 +84,8 @@
 		<div class="small-12 columns" id="footer">
 			<p>Copyright &copy; <?php echo date('Y'); ?> by CMEO.<br/>
 			All Rights Reserved.<br/>
-			<?php echo Yii::powered(); ?><br/>
+			<?php echo Yii::powered(); ?>
+			version <?php echo Yii::getVersion(); ?><br/>
 			With <a href="http://foundation.zurb.com/">Foundation version 4.2.1. from Zurb</a></p>
 		</div>
 	</div>

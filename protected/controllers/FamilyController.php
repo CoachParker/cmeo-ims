@@ -98,9 +98,15 @@ class FamilyController extends Controller
                             $masterValues = array ('entities'=>$entity->idEntity);
                             if (MultiModelForm::save($member,$validatedMembers,$deleteMembers,$masterValues))
                             {
-                                $entity->people = $validatedMembers;
-                                $entity->update();
-                                //$this->redirect(array('entity/view','id'=>$entity->idEntity));
+                                //$entity->people = $validatedMembers;
+                                //$entity->update();
+                                foreach($validatedMembers as $person ) {
+                                    $entityPerson = new EntityPerson;
+                                    $entityPerson->personId = $person->idPerson;
+                                    $entityPerson->entityId = $entity->idEntity;
+                                    if(!$entityPerson->save()) print_r($entityPerson->errors);  
+                                }
+                                $this->redirect(array('entity/view','id'=>$entity->idEntity));
                             }
                         }	
                         
