@@ -8,6 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
+	array('label'=>'New Family', 'url'=>array('/family/create')),
 	array('label'=>'List Visit', 'url'=>array('index')),
 	array('label'=>'Manage Visit', 'url'=>array('admin')),
 );

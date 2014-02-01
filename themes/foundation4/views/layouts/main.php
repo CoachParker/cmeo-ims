@@ -11,7 +11,8 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/foundation.css" />
 
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/vendor/custom.modernizr.js"></script>
-	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/foundation.min.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/foundation/foundation.js"></script>
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/foundation/foundation.reveal.js"></script>
         
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
@@ -32,28 +33,20 @@
 	'items'=>array(
 		array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 		array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest),
-		array('label'=>'Main', 
-			'url'=>array('#'), 
-			'itemOptions'=>array('class'=>'has-dropdown'), 
-			'submenuOptions'=>array('class'=>'dropdown'),
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-			),
-		),
+
 		array('label'=>'Menu', 
 			'url'=>array('#'), 
+                     'visible'=>!Yii::app()->user->isGuest,
 			'itemOptions'=>array('class'=>'has-dropdown'), 
 			'submenuOptions'=>array('class'=>'dropdown'),
 			'items'=>array(
-                                array('label'=>'Register Family', 'url'=>array('/entity/register')),
+                                array('label'=>'Register Family', 'url'=>array('/family/create')),
 				array('label'=>'People', 'url'=>array('/person/index')),
 				array('label'=>'Entities', 'url'=>array('/entity/')),
-				array('label'=>'Visit', 'url'=>array('/visit/')),
-				array('label'=>'Event', 'url'=>array('/event/')),
-				array('label'=>'Donation', 'url'=>array('/Donation/')),
-				array('label'=>'Membership', 'url'=>array('/membership/')),
+				array('label'=>'Visit', 'url'=>array('/visit/create')),
+				array('label'=>'Events', 'url'=>array('/event/')),
+				array('label'=>'Donations', 'url'=>array('/Donation/')),
+				array('label'=>'Memberships', 'url'=>array('/membership/')),
 			),
 		),
             array('label'=>'Operations', 
@@ -63,6 +56,17 @@
 			'submenuOptions'=>array('class'=>'dropdown'),
 			'items'=>$this->menu,
 		),
+            
+		array('label'=>'Main', 
+			'url'=>array('#'), 
+			'itemOptions'=>array('class'=>'has-dropdown'), 
+			'submenuOptions'=>array('class'=>'dropdown'),
+			'items'=>array(
+				array('label'=>'Home', 'url'=>array('/site/index')),
+				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
+				array('label'=>'Contact', 'url'=>array('/site/contact'), 'visible'=>!Yii::app()->user->isGuest),
+			),
+		),            
 	),
 )); ?>
 		</section>

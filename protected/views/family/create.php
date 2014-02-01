@@ -8,8 +8,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Family', 'url'=>array('index')),
-	array('label'=>'Manage Family', 'url'=>array('admin')),
+	array('label'=>'List Family', 'url'=>array('/entity/index')),
+	array('label'=>'Manage Family', 'url'=>array('/entity/admin')),
 );
 ?>
 

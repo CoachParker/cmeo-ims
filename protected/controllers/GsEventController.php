@@ -9,12 +9,6 @@ class EventController extends Controller
 	public $layout='//layouts/column2';
 
 	/**
-	 * This will allow binding action parameters from either GET or POST data
-	 * !!! ToDo - evaluate security risk
-	 */
-	public function getActionParams() { return array_merge($_GET, $_POST); }
-	
-	/**
 	 * @return array action filters
 	 */
 	public function filters()
@@ -57,27 +51,18 @@ class EventController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->loadModel($id);
-		//$model->attributeValues;
-		$this->render('view',array(
-			'model'=>$model,
+		$this->render('view2',array(
+			'model'=>$this->loadModel($id),
 		));
 	}
 
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * Just added attributes for EventType and EventAttributes, but have not written create/save for them yet, 2014-01-30
-	 *
 	 */
 	public function actionCreate()
 	{
-		Yii::import('ext.multimodelform.MultiModelForm');
-
 		$model=new Event;
-		$eventType=new EventType;
-		$member=new EventAttribute;
-		$validatedMembers = array(); // ensure an empty array
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -93,9 +78,6 @@ class EventController extends Controller
 		} else {
 			$this->render('create',array(
 				'model'=>$model,
-				'eventType'=>$eventType,
-				'member'=>$member,
-				'validatedMembers'=>$validatedMembers,
 			));
 		}
 	}
@@ -107,13 +89,7 @@ class EventController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		Yii::import('ext.multimodelform.MultiModelForm');
-                
 		$model=$this->loadModel($id);
-
-		$eventType=new EventType;
-		$member=new EventAttribute;
-		$validatedMembers = array(); // ensure an empty array
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -127,9 +103,6 @@ class EventController extends Controller
 
 		$this->render('update',array(
 			'model'=>$model,
-				'eventType'=>$eventType,
-				'member'=>$member,
-				'validatedMembers'=>$validatedMembers,
 		));
 	}
 
@@ -188,12 +161,12 @@ class EventController extends Controller
 		return $model;
 	}
 
-	
 	/**
 	 * Ensures the attributes input are valid for the event type, and then (optionally validates data and) adds them to the event
 	 * @param array $attr the attributes input, an array keyed by eventAttributeId containing the value for the event attribute in the EAV table
 	 * @param Event $event the event object to augment
 	 * @return Boolean was the process successful?
+         * Devin 2013-11-05
 	 */
 	public function addAttributes($attr, $event)
 	{
@@ -218,7 +191,6 @@ class EventController extends Controller
 		return true;
 	}
 	
-	
 	/**
 	 * Performs the AJAX validation.
 	 * @param Event $model the model to be validated
@@ -232,6 +204,11 @@ class EventController extends Controller
 		}
 	}
         
+        
+        /*
+         * Playing around, based on Entity has people check boxes in Visit form
+         * not usefull here
+         */
        public function actionDynamicAttributesCheck($id = null)
        {
           try{
@@ -257,88 +234,73 @@ class EventController extends Controller
           }catch(Exception $e){
                  echo $e->getMessage();
              }
-			
        }
         
        /*
         * Working on generating text boxes to set values for related attributes
         * take  1 incomplete as of 2013-10-28
+        * 2013-11-03 text fields based on eventType appear, but need to 
+        * be configured to save properly in both models, Event and 
+        * EventAttributeValue
+        * 2013-11-04 hoping hidden field might help on save, not yet
         */ 
-       public function actionAttributeTextBoxes($idEventType = null, $idEvent = null)
+       public function actionAttributeTextBoxes($id = null)
        {
-          Yii::trace(print_r($_POST, 1));
-		  //return true;
-		  try{
-            //if(is_null($id))
-                //$id = $_POST['Event']['eventTypeId'];
+          try{
             
-			 // //Yii::trace(print_r($_POST, 1));
-              // if(is_null($id))
-                // if ( isset($_POST['Event']) && isset($_POST['Event']['eventTypeId']) ) $id = $_POST['Event']['eventTypeId'];
-                // else {echo "Missing ID <br /><pre>".print_r($_POST, 1)."</pre>"; return;}
+              //Yii::trace(print_r($_POST, 1));
+              if(is_null($id))
+                if ( isset($_POST['Event']) && isset($_POST['Event']['eventTypeId']) ) $id = $_POST['Event']['eventTypeId'];
+                else {echo "Missing ID <br /><pre>".print_r($_POST, 1)."</pre>"; return;}
             
-            // $idevent = null;
-            // if( isset($_GET['idEvent']) && $_GET['idEvent'] != null){
-                // // !!! needs sanitization
-                // $idevent =$_GET['idEvent'];
-                // $event = Event::model()->findByPk($idevent);
-                // $attributesValues = array();
-                // foreach($event->attributeValues as $attr){
-                    // $id = $attr->eventAttributeId;
-                    // $value = $attr->value;
-                    // $attributeValues[$id]=$value;
-                // }
-				
-			if ($idEventType === null || $idEventType === '') {
-				Yii::trace('No EventTypeid provided');
-				return ''; 
-			}
-			
-			$eventType = EventType::model()->findByPk($idEventType);
-			
-			$event = null;
-			
-			if ($idEvent === null || $idEvent === '') {
-				Yii::trace('There was no event id provided');
-			} else {
-				$event = Event::model()->findByPk($idEvent);
-				$values = $event->attributeValues;
-			}
-            //Yii::trace($event);
+            $idevent = null;
+            if( isset($_GET['idEvent']) && $_GET['idEvent'] != null){
+                // !!! needs sanitization
+                $idevent =$_GET['idEvent'];
+                $event = Event::model()->findByPk($idevent);
+                $attributesValues = array();
+                foreach($event->attributeValues as $attr){
+                    $id = $attr->eventAttributeId;
+                    $value = $attr->value;
+                    $attributeValues[$id]=$value;
+                }
+            }
             
-            if(is_null($eventType) ) {
-			    Yii::trace('There was no event type found for that id'); //echo 'There are no additional attributes setup for that type of event.';
-				return '';
-			}
-			
-			
+            $eventType = EventType::model()->findByPk($id);
+            
+            if(is_null($eventType) )
+                echo 'There are no additional attributes setup for that type of event.';
+            
             $eventTypeAttributes = $eventType->eventAttributes;
             if($eventTypeAttributes) {
+                // code from Devin 2013-11-05
                 echo '<form action="get">';
-                foreach($eventTypeAttributes as $attribute) {
-					
-					$value = null;
-					if ( isset($values) ) {
-						foreach ($values as $eventAttributeValue) {
-							if ($eventAttributeValue->eventAttributeId == $attribute->idEventAttribute)
-								$value = $eventAttributeValue->value;
-						}
-					}
-					
-					echo CHtml::tag('label',
+                foreach($eventTypeAttributes as $attribute)
+                    {
+                    $inputValues = array(
+                        'id'=>'eventattr'.$attribute->idEventAttribute,
+                        'name'=>'Event[attributes]['.$attribute->idEventAttribute.']');
+                    if($idevent){
+                        $inputValues['value']=$attributeValues[$attribute->idEventAttribute];
+                    }
+                    echo CHtml::tag(
+                            'label',
                             array('for'=>'eventattr'.$attribute->idEventAttribute),
                             CHtml::encode($attribute->displayName),
                             true);
-					echo CHtml::activeTextField(
-							EventAttributeValue::model(),// not sure about this
+                    echo CHtml::tag(
+                            'input',
+                            $inputValues
+                            );
+                 /*   echo CHtml::activeTextField(
+                            EventAttributeValue::model(),// not sure about this
                             'value',
                             array('placeholder'=>$attribute->displayName,
                                 'id'=>'eventattr'.$attribute->idEventAttribute, 
-                                'name'=>'Event[attributes]['.$attribute->idEventAttribute.']',
-								'value' => $value ),
-                            true);
-                }
-				echo '</form>';
+                                'name'=>'Event[attributes]['.$attribute->idEventAttribute.']'),
+                            true); */
+                    }
+                    echo '</form>';
              }
              else{
                  echo '<input type="text" placeholder="No additional attributes">';

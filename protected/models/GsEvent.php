@@ -28,9 +28,6 @@
  */
 class Event extends CActiveRecord
 {
-	public $eavTypeAttributeIds = array();
-	public $eavAttributes = array();
-	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -56,6 +53,12 @@ class Event extends CActiveRecord
 			array('idEvent, name, eventDate, endDate, recurrence, classLimit, description, ageGroupId, eventTypeId, notes, sponsorEntityId, facilitatorPersonId', 'safe', 'on'=>'search'),
 		);
 	}
+        
+        public function behaviors() {
+            return array( 'CAdvancedArBehavior' => array(
+            'class' => 'CAdvancedArBehavior'));
+        }
+        
 
 	/**
 	 * @return array relational rules.
@@ -91,57 +94,11 @@ class Event extends CActiveRecord
 			'ageGroupId' => 'Age Group',
 			'eventTypeId' => 'Event Type',
 			'notes' => 'Notes',
-			'sponsorEntityId' => 'Sponsoring Entity',
+			'sponsorEntityId' => 'Sponsor Entity',
 			'facilitatorPersonId' => 'Facilitator Person',
 		);
 	}
 
-	public function attributeLabelsEav($filter = true)
-	{
-		$labels = array();
-		
-		foreach($this->getEavValues($filter) as $attrVal){
-			$id = $attrVal->eventAttributeId;
-			$label = $attrVal->attributes->displayName;
-			$labels[$id] = $label;
-		}
-		return $labels;
-	}
-	
-	public function getEavTypeAttributeIds()
-	{
-		static $cached = false;
-		if ( !$cached ) {
-			Yii::trace('getEavTypeAttributeIds not cached');
-			foreach($this->eventType->eventAttributes as $attr){
-				$this->eavTypeAttributeIds[] = $attr->idEventAttribute;
-			}
-			$cached = true;
-		}
-		return $this->eavTypeAttributeIds;
-	}
-	
-	public function getEavValues($filter = true)
-	{
-		static $filtered;
-		$ids = array();
-		if ($filter) $ids = $this->getEavTypeAttributeIds();
-		
-		static $cached = false;
-		if ( $cached && $filter == $filtered) return $this->eavAttributes;
-			
-		Yii::trace('getEavAttributes not cached or getting non filtered');
-		$this->eavAttributes = array();
-		foreach($this->attributeValues as $attr){
-			//Todo: check if attribute is active, or depricated for Event Type (needs table col)
-			if ( $filter == false || ($filter == true && in_array($attr->eventAttributeId, $ids)) );
-				$this->eavAttributes[] = $attr;
-		}
-		$cached = true;
-		return $this->eavAttributes;
-		
-	}
-	
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -206,5 +163,43 @@ class Event extends CActiveRecord
 	      }
               return implode(" ",$result);
 	}
+/*  Get attributes related to eventType 
+ * 
+ */
+        public function getAttribtuteList()
+        {
+            $result=array();
+            If ($this->attributeValues){
+                foreach ($this->attributeValues as $attribute){
+                    $result[] = CHtml::encode($attribute->eventAttributeId) . ":" . CHtml::encode($attribute->value);
+                }
+            }
+            else{
+                $result[] = "No additional attributes";
+            }
+        return implode(", ",$result);
+        }
 
-}
+/*
+ * Devin's code for viewing attributes and values
+ * 2013-11-05
+ */     
+        public function getAttributesValues()
+        {
+            $descriptions = array();
+            $attributes = array();
+            foreach($this->eventType->eventAttributes as $attr){
+                $descriptions[$attr->idEventAttribute] = $attr->displayName;
+                
+            }
+            foreach($this->attributeValues as $attr){
+                $id = $attr->eventAttributeId;
+                $value = $attr->value;
+                if ($descriptions[$id]){
+                    $attributes[] = array( 'label' => $descriptions[$id], 'value' => $value);
+                    
+                }       
+                }	
+                return $attributes;
+        }
+            }

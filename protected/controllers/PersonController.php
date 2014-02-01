@@ -1,4 +1,5 @@
-<?php
+
+`<?php
 
 class PersonController extends Controller
 {
@@ -69,6 +70,7 @@ class PersonController extends Controller
 	 */
 	public function actionCreate()
 	{
+                        //Yii::trace('<pre>'.print_r( $_POST,1 ).'</pre>');
 		$model=new Person;
 
 		// Uncomment the following line if AJAX validation is needed
@@ -77,8 +79,8 @@ class PersonController extends Controller
 		if(isset($_POST['Person']))
 		{
 			$model->attributes=$_POST['Person'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->idPerson));
+                        //$model->save();
+			if($model->save()) $this->redirect(array('view','id'=>$model->idPerson));
 		}
 
 		$this->render('create',array(

@@ -1,12 +1,10 @@
 <?php
 /* @var $this EventController */
 /* @var $model Event */
-  /* @var $eventType EventType */
-  /* @var $member EventAttribute */
 /* @var $form CActiveForm */
 ?>
 
-<div class="form panel">
+<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'event-form',
@@ -22,51 +20,42 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-            <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'name'); ?>
 		<?php echo $form->textField($model,'name',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($model,'name'); ?>
-            </div>
 	</div>
 
 	<div class="row">
-            <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'eventDate'); ?>
-		<?php echo $form->dateField($model,'eventDate'); ?>
+		<?php echo $form->textField($model,'eventDate'); ?>
 		<?php echo $form->error($model,'eventDate'); ?>
-            </div>
-
-            <div class="large-6 columns">
-		<?php echo $form->labelEx($model,'endDate'); ?>
-		<?php echo $form->dateField($model,'endDate'); ?>
-		<?php echo $form->error($model,'endDate'); ?>
-            </div>
 	</div>
 
 	<div class="row">
-            <div class="large-6 columns">
+		<?php echo $form->labelEx($model,'endDate'); ?>
+		<?php echo $form->textField($model,'endDate'); ?>
+		<?php echo $form->error($model,'endDate'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'recurrence'); ?>
 		<?php echo $form->textField($model,'recurrence',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($model,'recurrence'); ?>
-            </div>
+	</div>
 
-            <div class="large-6 columns">
+	<div class="row">
 		<?php echo $form->labelEx($model,'classLimit'); ?>
 		<?php echo $form->textField($model,'classLimit'); ?>
 		<?php echo $form->error($model,'classLimit'); ?>
-            </div>
 	</div>
 
 	<div class="row">
-            <div class="large-12 columns">
 		<?php echo $form->labelEx($model,'description'); ?>
 		<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'description'); ?>
-            </div>
 	</div>
 
 	<div class="row">
-            <div class="large-12 columns">
 		<?php echo $form->labelEx($model,'ageGroupId'); ?>
 		<?php echo $form->radioButtonList(
                         $model,
@@ -75,18 +64,15 @@
                         array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))
                         ); ?>  
 		<?php echo $form->error($model,'ageGroupId'); ?>
-            </div>
 	</div>
 
       
         <div class="row">
-            <div class="large-4 columns">
             <?php echo $form->labelEx($model,'eventTypeId'); ?>
             <?php echo $form->dropDownList(
                         $model,
                         'eventTypeId',
-//                        array_merge(CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName'),array("__new__"=>'Create new type')),
-                        CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName'),
+                        array_merge(CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName'),array("__new__"=>'Create new type')),
                         array(
                             'prompt' => 'Select an Event Type',
                             //'options' => array()
@@ -104,29 +90,19 @@
 		<?php echo $form->error($model,'entityId'); ?>
         </div>
         
-            <div class="large-4 columns">
-                <fieldset>
-                    <legend>Additional Attributes</legend>
-                    <div id="Event_attributeValues">
-                    </div>
-                </fieldset>
+        <fieldset>
+            <legend>Additional Attributes</legend>
+            <div id="Event_attributeValues">
             </div>
-            <div class="large-4 columns">
-                <a href="#" class="small button" data-reveal-id="myModal">Add New Event Type</a>
-            </div>
-                
-        </div>
+        </fieldset>
         
 	<div class="row">
-            <div class="large-12 columns">
 		<?php echo $form->labelEx($model,'notes'); ?>
 		<?php echo $form->textArea($model,'notes',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'notes'); ?>
-            </div>
 	</div>
 
 	<div class="row">
-            <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'sponsorEntityId'); ?>
                 <?php echo $form->dropDownList(
                         $model,
@@ -134,9 +110,9 @@
                         CHtml::listData(Entity::model()->findAll(), 'idEntity', 'name'),
                         array('prompt' => 'Select a Group')); ?>
 		<?php echo $form->error($model,'sponsorEntityId'); ?>
-            </div>
+	</div>
 
-            <div class="large-6 columns">
+	<div class="row">
 		<?php echo $form->labelEx($model,'facilitatorPersonId'); ?>
                 <?php echo $form->dropDownList(
                         $model,
@@ -144,7 +120,6 @@
                         CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName','lastName'),
                         array('prompt' => 'Select a Person')); ?>
 		<?php echo $form->error($model,'facilitatorPersonId'); ?>
-            </div>
 	</div>
 
 	<div class="row buttons">
@@ -154,99 +129,82 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
-
 <div id="myModal" class="reveal-modal" >
-    Hey Lets make a new event type.
-    <!-- begin event type attribute form -->
-    <?php
-        $form = $this->beginWidget('CActiveForm', array(
-            'id'=>'add-eventType',
-            'enableAjaxValidation'=>false
-            ));
-    ?>
+Hey Lets make a new event type.
+<!-- begin event type attribute form -->
+<?php
+    /*
+     * Attempting to add eventType and eventAttributes to event form
+     */
+    return array(
+	 'elements'=>array(
+	     'entity'=>array(
+	         'type'=>'form',
+	         'title'=>'New Entity Registration',
+		 'class'=>'panel',
+		 'elements'=>array(
+		     'eventType'=>array(
+			  'type'=>'text',
+					),
+		     'displayName'=>array(
+			  'type'=>'text',
+					  ),
+		     'description'=>array(
+			  'type'=>'text',
+					  ),
+				   ),
+			     ),
+			   ),
+		 );
+?>
 
-            <p class="note">Fields with <span class="required">*</span> are required.</p>
+<!--<h1>Add Attributes</h1>-->
 
-            <?php
-            //show errorsummary at the top for all models
-            //build an array of all models to check
-            echo $form->errorSummary(array_merge(array($eventType),$validatedMembers));
-            ?>
-
-    <div class="panel">
-        <div class="row">
-            <div class="large-4 columns">
-                    <?php echo $form->labelEx($eventType,'eventType'); ?>
-                    <?php echo $form->textField($eventType,'eventType',array('size'=>45,'maxlength'=>45)); ?>
-                    <?php echo $form->error($eventType,'eventType'); ?>
-            </div>
-
-           <div class="large-4 columns">
-                    <?php echo $form->labelEx($eventType,'displayName'); ?>
-                    <?php echo $form->textField($eventType,'displayName',array('size'=>45,'maxlength'=>45)); ?>
-                    <?php echo $form->error($eventType,'displayName'); ?>
-            </div>
-
-           <div class="large-4 columns">
-                    <?php echo $form->labelEx($eventType,'description'); ?>
-                    <?php echo $form->textField($eventType,'description',array('size'=>45,'maxlength'=>45)); ?>
-                    <?php echo $form->error($eventType,'description'); ?>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!--<h1>Add Attributes</h1>-->
-
-    <?php
-    $memberFormConfig = array(
-                'class'=>'panel',
-                'elements'=>array(
-                    'attribute'=>array(
-                        'type'=>'text',
-                        //'class'=>'large-6 columns',
-                    ),
-                    'displayName'=>array(
-                        'type'=>'text',
-                        //'class'=>'large-6 columns',
-                    ),
-                    'description'=>array(
-                        'type'=>'text',
-                        //'class'=>'large-6 columns',
-                    ),
-                    'valueType'=>array(
-                        'type'=>'text',
-                        //'class'=>'large-6 columns',
-                    ),
+<?php
+$memberFormConfig = array(
+            'class'=>'panel',
+            'elements'=>array(
+                'attribute'=>array(
+                    'type'=>'text',
+                    //'class'=>'large-6 columns',
                 ),
-    );
+                'displayName'=>array(
+                    'type'=>'text',
+                    //'class'=>'large-6 columns',
+                ),
+                'description'=>array(
+                    'type'=>'text',
+                    //'class'=>'large-6 columns',
+                ),
+                'valueType'=>array(
+                    'type'=>'text',
+                    //'class'=>'large-6 columns',
+                ),
+            ),
+);
 
-    $this->widget('ext.multimodelform.MultiModelForm',array(
+$this->widget('ext.multimodelform.MultiModelForm',array(
         'id' => 'id_member', //the unique widget id
         'formConfig' => $memberFormConfig, //the form configuration array
         'model' => $member, //instance of the form model
         'tableView' => true,
-        'addItemText' => 'Add Attributes',
-        'addItemAsButton' => true,
-        'hideCopyTemplate' => false,
-
+    'addItemText' => 'Add Attributes',
+    'addItemAsButton' => true,
+    'hideCopyTemplate' => false,
+ 
         //if submitted not empty from the controller,
         //the form will be rendered with validation errors
         'validatedItems' => $validatedMembers,
-
+ 
         //array of member instances loaded from db
         //'data' => $member->findAll('entities=:groupId', array(':groupId'=>$eventType->idEntity)),
-        ));
+    ));
 
-    ?>
+?>
 
-    <div class="row buttons">
-        <?php echo CHtml::submitButton($eventType->isNewRecord ? 'Create' : 'Save'); ?>
-    </div>
-
-</div>
-<a href="#" class="small button" data-reveal-id="myModal">Add New Event Type</a>
+	<div class="row buttons">
+		<?php echo CHtml::submitButton($eventType->isNewRecord ? 'Create' : 'Save'); ?>
+	</div>
 
 
 <?php $this->endWidget(); ?>
@@ -256,7 +214,7 @@
 </div>
 
 <?php  
-//Yii::app()->clientscript->scriptMap['jquery.js'] = false;
+Yii::app()->clientscript->scriptMap['jquery.js'] = false;
 //Yii::app()->clientScript->registerCoreScript('jquery');
 Yii::app()->clientScript->registerScript('dynamic-typefields', //<<<'Javascript'
 '	

@@ -73,41 +73,26 @@
 	</div>
 
 	<div class="row">
-    <div class="large-4 columns">
+            <div class="large-3 columns">
 		<?php echo $form->labelEx($entity,'phone'); ?>
 		<?php echo $form->textField($entity,'phone',array('size'=>17,'maxlength'=>17)); ?>
 		<?php echo $form->error($entity,'phone'); ?>
-	</div>
+            </div>
 
-	<div class="large-8 columns">
+            <div class="large-9 columns">
 		<?php echo $form->labelEx($entity,'comments'); ?>
 		<?php echo $form->textArea($entity,'comments',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($entity,'comments'); ?>
-	</div>
+            </div>
 	</div>
             
 
-	<div class="row">
-	<div class="large-6 columns">
-		<?php echo $form->labelEx($entity,'people'); ?>
-                <?php $this->widget('ext.select2.ESelect2',array(
-                     'model'=>$entity,  
-                     'attribute'=>'people',
-                     'data'=>CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName', 'lastName'),
-                     'options'=>array(
-                         'width'        => '100%',
-                         'placeholder'  => 'Type a name'
-                     ),
-                     )); ?>
-		<?php echo $form->error($entity,'people'); ?>
-	</div>
-	<div class="large-6 columns">&nbsp;</div>
-	</div>
+
             
 	</div>
 
 
-<h1>Add Person</h1>
+<!--<h1>Add Person</h1>-->
 
 <?php
 $memberFormConfig = array(
@@ -151,6 +136,9 @@ $this->widget('ext.multimodelform.MultiModelForm',array(
         'formConfig' => $memberFormConfig, //the form configuration array
         'model' => $member, //instance of the form model
         'tableView' => true,
+    'addItemText' => 'Add family member',
+    'addItemAsButton' => true,
+    'hideCopyTemplate' => false,
  
         //if submitted not empty from the controller,
         //the form will be rendered with validation errors

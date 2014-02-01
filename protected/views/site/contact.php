@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<h1>Contact Us</h1>
+<h1>Contact Tech Support</h1>
 
 <?php if(Yii::app()->user->hasFlash('contact')): ?>
 
@@ -20,7 +20,7 @@ $this->breadcrumbs=array(
 <?php else: ?>
 
 <p>
-If you have business inquiries or other questions, please fill out the following form to contact us. Thank you.
+If you have questions about Data Land, then please fill out the following form to contact Gary. Thank you.
 </p>
 
 <div class="form">

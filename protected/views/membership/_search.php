@@ -12,8 +12,8 @@
 )); ?>
 
 	<div class="row">
-		<?php echo $form->label($model,'idmembership'); ?>
-		<?php echo $form->textField($model,'idmembership'); ?>
+		<?php echo $form->label($model,'idMembership'); ?>
+		<?php echo $form->textField($model,'idMembership'); ?>
 	</div>
 
 	<div class="row">

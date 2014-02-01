@@ -43,7 +43,7 @@ class EventAttribute extends CActiveRecord
 
         public function behaviors() {
             return array( 'CAdvancedArBehavior' => array(
-            'class' => 'CAdvancedArBehavior'));
+            'class' => 'application.extensions.CAdvancedArBehavior'));
         }
 	/**
 	 * @return array relational rules.

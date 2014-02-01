@@ -73,7 +73,8 @@ class FamilyController extends Controller
 	 */
 	public function actionCreate()
 	{
-            Yii::trace('<pre>'.print_r( $_POST,1 ).'</pre>');
+            //var_dump( $_POST ); 
+            //Yii::trace('<pre>'.print_r( $_POST,1 ).'</pre>');
             Yii::import('ext.multimodelform.MultiModelForm');
  
 		$entity = new Entity;
@@ -85,21 +86,21 @@ class FamilyController extends Controller
 
 		if(isset($_POST['Entity']))
 		{
-                    Yii::trace("HELLO 0 ...".$entity->idEntity);
 			$entity->attributes=$_POST['Entity'];
                         
 			if($entity->save())
                         {
-                            Yii::trace("HELLO 1 ...".$entity->idEntity);
                             if(MultiModelForm::validate($member,$validatedMembers))
                             {
                             //the value for the foreign key 'groupid'
-                            Yii::trace("HELLO 2 ...".$entity->idEntity);
-                            $masterValues = array ('entities'=>$entity->idEntity);
+                            //Yii::trace('<pre>'.print_r($validatedMembers,1).'</pre>');
+                            $masterValues = array ('entities'=>array(0=>$entity->idEntity));
+                            //Yii::trace('<pre>'.print_r($masterValues,1).'</pre>');
                             if (MultiModelForm::save($member,$validatedMembers,$deleteMembers,$masterValues))
                             {
                                 //$entity->people = $validatedMembers;
                                 //$entity->update();
+                                //write many-to-many relations, since masterValues isn't working with CAdvancedArBehaviour
                                 foreach($validatedMembers as $person ) {
                                     $entityPerson = new EntityPerson;
                                     $entityPerson->personId = $person->idPerson;

@@ -123,4 +123,25 @@ class Visit extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-}
+                
+        /**
+         * 
+         * @return string people
+         * 2014-01-25 copied from Entity Model, may need adjusting
+         */
+        public function getPersonList()
+        {
+            $result=array();
+            If ($this->people){
+                foreach ($this->people as $person){
+                    $result[] = CHtml::link(CHtml::encode($person->firstName . " " . $person->lastName),
+                            array('person/view','id'=>$person->idPerson));
+                }
+            }
+            else{
+                $result[] = "What?! NO People! Fix This!";
+            }
+        return implode(", ",$result);
+        }
+        
+ }

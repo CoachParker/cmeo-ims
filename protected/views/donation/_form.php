@@ -112,7 +112,12 @@
             
             <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'isThanked'); ?>
-		<?php echo $form->textField($model,'isThanked'); ?>
+		<?php echo $form->radioButtonList(
+                        $model,
+                        'isThanked',
+                        array(0=>'No',1=>'yes'),
+                        array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))); ?>
+                
 		<?php echo $form->error($model,'isThanked'); ?>
             </div>
 	</div>

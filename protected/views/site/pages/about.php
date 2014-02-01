@@ -6,6 +6,9 @@ $this->breadcrumbs=array(
 	'About',
 );
 ?>
-<h1>About</h1>
 
-<p>This is the Children's Museum of Eastern Oregon's data management system.</p>
+<p>Welcome to the Children's Museum of Eastern Oregon Information Management System.</p>
+
+<p>If you are a registered user then please proceed to the <a href="site/login" class="tiny button round">login</a> page, otherwise
+    please return to our <a href="http://cmeo.org/" target="_blank">visitor's site</a>.</p>
+
