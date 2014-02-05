@@ -126,7 +126,8 @@ class EventTypeController extends Controller
                                     $eventTypeAttribute->eventTypeId = $eventType->idEventType;
                                     if(!$eventTypeAttribute->save()) print_r($eventTypeAttribute->errors);  
                                 }
-                                $this->redirect(array('eventType/view','id'=>$eventType->idEventType));
+                                $this->refresh();
+                                //$this->redirect(array('eventType/view','id'=>$eventType->idEventType));
                             }
                         }	
                         

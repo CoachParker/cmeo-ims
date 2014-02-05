@@ -161,6 +161,7 @@
     <?php
         $form = $this->beginWidget('CActiveForm', array(
             'id'=>'add-eventType',
+            'action'=>'createA',
             'enableAjaxValidation'=>false
             ));
     ?>

@@ -38,7 +38,7 @@ class EventController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user with role to perform all actions
-				'actions'=>array('index','view','create','update','admin','delete','attributetextboxes'),
+				'actions'=>array('index','view','create','createA','update','admin','delete','attributetextboxes'),
 				'users'=>array('@'),
 				'expression'=>'isset($user->type) && 
 				(($user->type==="admin") || 
@@ -100,6 +100,63 @@ class EventController extends Controller
 		}
 	}
 
+	/**
+	 * Creates a new EventType with Attributes.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionCreateA()
+	{
+            //var_dump( $_POST ); 
+            //Yii::trace('<pre>'.print_r( $_POST,1 ).'</pre>');
+            Yii::import('ext.multimodelform.MultiModelForm');
+ 		$model=new Event;
+		$eventType = new EventType;
+                $member = new EventAttribute;
+                $validatedMembers = array();  //ensure an empty array
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['EventType']))
+		{
+			$eventType->attributes=$_POST['EventType'];
+                        
+			if($eventType->save())
+                        {
+                            if(MultiModelForm::validate($member,$validatedMembers))
+                            {
+                            //the value for the foreign key 'groupid'
+                            //Yii::trace('<pre>'.print_r($validatedMembers,1).'</pre>');
+                            $masterValues = array ('eventTypes'=>array(0=>$eventType->idEventType));
+                            //Yii::trace('<pre>'.print_r($masterValues,1).'</pre>');
+                            if (MultiModelForm::save($member,$validatedMembers,$deleteMembers,$masterValues))
+                            {
+                                //$entity->people = $validatedMembers;
+                                //$entity->update();
+                                //write many-to-many relations, since masterValues isn't working with CAdvancedArBehaviour
+                                foreach($validatedMembers as $attribute ) {
+                                    $eventTypeAttribute = new EventTypeAttribute;
+                                    $eventTypeAttribute->eventAttributeId = $attribute->idEventAttribute;
+                                    $eventTypeAttribute->eventTypeId = $eventType->idEventType;
+                                    if(!$eventTypeAttribute->save()) print_r($eventTypeAttribute->errors);  
+                                }
+                                $this->refresh();
+                                //$this->redirect(array('eventType/view','id'=>$eventType->idEventType));
+                            }
+                        }	
+                        
+                            }	
+		}
+
+		$this->render('create',array(
+			'model'=>$model,
+				'eventType'=>$eventType,
+                    //submit the member and validatedItems to the widget in the edit form
+                    'member' => $member,
+                    'validatedMembers' => $validatedMembers,
+		));
+	}
+        
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.

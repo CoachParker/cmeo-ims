@@ -75,7 +75,7 @@ $this->widget('ext.multimodelform.MultiModelForm',array(
         'tableView' => true,
     'addItemText' => 'Add Attributes',
     'addItemAsButton' => true,
-    'hideCopyTemplate' => false,
+    'hideCopyTemplate' => FALSE,
  
         //if submitted not empty from the controller,
         //the form will be rendered with validation errors

@@ -32,7 +32,7 @@
 	<div class="row">
             <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'birthDate'); ?>
-		<?php echo $form->textField($model,'birthDate'); ?>
+		<?php echo $form->dateField($model,'birthDate'); ?>
 		<?php echo $form->error($model,'birthDate'); ?>
             </div>
 
