@@ -9,7 +9,7 @@ class UserIdentity extends CUserIdentity
 {
     /*
      * From Yii Authentication tutorial
-     * Gary 2013-12-28
+     * Gary Parker 2013-12-28
      */
                 public $_id;
                 
