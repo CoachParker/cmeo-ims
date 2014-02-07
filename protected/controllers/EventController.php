@@ -165,11 +165,22 @@ class EventController extends Controller
         public function actionAjaxGetTypes(){
             
             //echo "<option value='1'>test1</option> <option value='2'>test2</option>";
+            /* This isn't working
             echo CHtml::listOptions(
                     null,
                     CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName'),
                     array('prompt'=>'Select a Type')
                     );
+            */ 
+            // I got something like this to work earlier in development
+            // Good it works!
+            $data=CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName');
+            foreach($data as $value=>$name)
+                {
+                echo CHtml::tag(
+                        'option',
+                        array('value'=>$value),CHtml::encode($name),true);
+                }
         }
 	/**
 	 * Updates a particular model.
