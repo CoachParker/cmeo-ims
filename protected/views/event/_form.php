@@ -171,6 +171,7 @@
             <?php
             //show errorsummary at the top for all models
             //build an array of all models to check
+            
             echo $form->errorSummary(array_merge(array($eventType),$validatedMembers));
             ?>
 
@@ -243,10 +244,31 @@
     ?>
 
     <div class="row buttons">
-        <?php echo CHtml::submitButton($eventType->isNewRecord ? 'Create' : 'Save'); ?>
+        <?php //echo CHtml::submitButton($eventType->isNewRecord ? 'Create' : 'Save');
+        			echo CHtml::ajaxSubmitButton(
+	        			$eventType->isNewRecord ? 'Create' : 'Save',
+	        			CHtml::normalizeUrl(array('event/createA')),
+	        			array(
+	        				'success'=>"function(ret){
+                                                        console.log(ret);
+                                                        jQuery.ajax({
+                                                            'success':function(data){
+                                                                    console.log(data);
+                                                                    $('#Event_eventTypeId').html(data);
+                                                                },
+                                                             'type':'POST',
+                                                             'url':'/ims/event/ajaxGetTypes',
+                                                             'cache':false
+                                                        });
+                                                        $('#myModal').foundation('reveal', 'close');
+                                                    }"
+	        				
+        				))
+         ?>
     </div>
 
 </div>
+
 <a href="#" class="small button" data-reveal-id="myModal">Add New Event Type</a>
 
 

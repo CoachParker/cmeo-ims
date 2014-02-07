@@ -38,7 +38,7 @@ class EventController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user with role to perform all actions
-				'actions'=>array('index','view','create','createA','update','admin','delete','attributetextboxes'),
+				'actions'=>array('index','view','create','createA','update','admin','delete','attributetextboxes','ajaxGetTypes'),
 				'users'=>array('@'),
 				'expression'=>'isset($user->type) && 
 				(($user->type==="admin") || 
@@ -157,6 +157,20 @@ class EventController extends Controller
 		));
 	}
         
+        
+        /*
+         * reload eventTypes for new event form
+         */
+        
+        public function actionAjaxGetTypes(){
+            
+            //echo "<option value='1'>test1</option> <option value='2'>test2</option>";
+            echo CHtml::listOptions(
+                    null,
+                    CHtml::listData(EventType::model()->findAll(), 'idEventType', 'displayName'),
+                    array('prompt'=>'Select a Type')
+                    );
+        }
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
