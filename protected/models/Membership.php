@@ -17,9 +17,12 @@
  * The followings are the available model relations:
  * @property Entity $entity
  * @property MembershipType $type
+ * @property Person $staff
  */
 class Membership extends CActiveRecord
 {
+    public $entity_search;
+    public $membershipTypeSearch;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -52,7 +55,7 @@ class Membership extends CActiveRecord
 			array('startDate, endDate, createDate, comments', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('idMembership, entityId, startDate, endDate, typeId, amountPaid, enteredBy, createDate, comments', 'safe', 'on'=>'search'),
+			array('idMembership, entityId, entity, entity.name, entity_search, membershipTypeSearch, startDate, endDate, typeId, amountPaid, enteredBy, createDate, comments', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,9 +66,11 @@ class Membership extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
+		
 		return array(
 			'entity' => array(self::BELONGS_TO, 'Entity', 'entityId'),
 			'type' => array(self::BELONGS_TO, 'MembershipType', 'typeId'),
+                        'staff' => array(self::BELONGS_TO, 'User', 'enteredBy'),
 		);
 	}
 
@@ -80,6 +85,7 @@ class Membership extends CActiveRecord
 			'startDate' => 'Start Date',
 			'endDate' => 'End Date',
 			'typeId' => 'Type',
+			'membershipTypeSearch' => 'Type',
 			'amountPaid' => 'Amount Paid',
 			'enteredBy' => 'Entered By',
 			'createDate' => 'Create Date',
@@ -97,19 +103,39 @@ class Membership extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+                $criteria->with = array('entity','type');
 
 		$criteria->compare('idMembership',$this->idMembership);
-		$criteria->compare('entityId',$this->entityId);
+//		$criteria->compare('entityId',$this->entityId,true);
+                $criteria->compare('entity.name',$this->entity_search,true);
 		$criteria->compare('startDate',$this->startDate,true);
 		$criteria->compare('endDate',$this->endDate,true);
-		$criteria->compare('typeId',$this->typeId);
+		//		$criteria->compare('typeId',$this->typeId);
+		$criteria->compare('type.name',$this->membershipTypeSearch,true);
 		$criteria->compare('amountPaid',$this->amountPaid,true);
 		$criteria->compare('enteredBy',$this->enteredBy,true);
 		$criteria->compare('createDate',$this->createDate,true);
 		$criteria->compare('comments',$this->comments,true);
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
+                return new CActiveDataProvider( $this, array(
+                    'criteria'=>$criteria,
+                    'sort'=>array(
+                        'attributes'=>array(
+                            'entity_search'=>array(
+                                'asc'=>'entity.name',
+                                'desc'=>'entity.name DESC',
+                                ),
+                             'membershipTypeSearch'=>array(
+                             		'asc'=>'type.name',
+                             		'desc'=>'type.name DESC',
+                             		),
+                            '*',
+                            ),
+                        ),
+                    ));
+                
+		//return new CActiveDataProvider($this, array(
+		//	'criteria'=>$criteria,
+		//));
 	}
 }

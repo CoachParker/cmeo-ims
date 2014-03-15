@@ -11,6 +11,9 @@
  * @property string $amountPaid
  * @property integer $destinationEventId
  *
+ * @property string $entitySearch
+ * @property string $destinationSearch
+ * 
  * The followings are the available model relations:
  * @property Entity $entity
  * @property Event $destinationEvent
@@ -18,6 +21,8 @@
  */
 class Visit extends CActiveRecord
 {
+        public $entitySearch;
+        public $destinationSearch;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -43,7 +48,7 @@ class Visit extends CActiveRecord
 			      'setOnEmpty'=>false,'on'=>'insert'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('idVisit, visitDateTime, entityId, numberOfGuests, amountPaid, destinationEventId, entity, destinationEvent, people', 'safe', 'on'=>'search'),
+			array('idVisit, visitDateTime, entityId, entitySearch, destinationSearch, numberOfGuests, amountPaid, destinationEventId, entity, destinationEvent, people', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,7 +57,7 @@ class Visit extends CActiveRecord
          */
         public function behaviors() {
             return array( 'CAdvancedArBehavior' => array(
-            'class' => 'CAdvancedArBehavior'));
+            'class' => 'application.extensions.CAdvancedArBehavior'));
         }
 	/**
 	 * @return array relational rules.
@@ -77,6 +82,8 @@ class Visit extends CActiveRecord
 			'idVisit' => 'Id Visit',
 			'visitDateTime' => 'Visit Date Time',
 			'entityId' => 'Entity',
+                    'entitySearch' => 'Entity',
+                    'destinationSearch' => 'Destination',
 			'numberOfGuests' => 'Number Of Guests',
 			'amountPaid' => 'Amount Paid',
 			'destinationEventId' => 'Destination Event',
@@ -100,16 +107,30 @@ class Visit extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+                $criteria->with = array('entity', 'destinationEvent');
 
 		$criteria->compare('idVisit',$this->idVisit);
 		$criteria->compare('visitDateTime',$this->visitDateTime,true);
-		$criteria->compare('entityId',$this->entityId);
+		$criteria->compare('entity.name',$this->entitySearch,true);
 		$criteria->compare('numberOfGuests',$this->numberOfGuests);
 		$criteria->compare('amountPaid',$this->amountPaid,true);
-		$criteria->compare('destinationEventId',$this->destinationEventId);
+		$criteria->compare('destinationEvent.name',$this->destinationSearch,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'sort'=>array(
+                            'attributes'=>array(
+                                'entitySearch'=>array(
+                                    'asc'=>'entity.name',
+                                    'desc'=>'entity.name DESC'
+                                    ),
+                                'destinationSearch'=>array(
+                                    'asc'=>'destinationEvent.name',
+                                    'desc'=>'destinationEvent.name DESC'
+                                    ),
+                                '*',
+                                ),
+                        ),
 		));
 	}
 
@@ -132,7 +153,7 @@ class Visit extends CActiveRecord
         public function getPersonList()
         {
             $result=array();
-            If ($this->people){
+            if ($this->people){
                 foreach ($this->people as $person){
                     $result[] = CHtml::link(CHtml::encode($person->firstName . " " . $person->lastName),
                             array('person/view','id'=>$person->idPerson));
@@ -143,5 +164,25 @@ class Visit extends CActiveRecord
             }
         return implode(", ",$result);
         }
+
+	/*
+	* @return string membership end date
+	*/
+
+	public function getMemberDates()
+	{
+	  $result=array();
+	  if (count($this->entity->memberships) > 0){
+	    foreach ($this->entity->memberships as $membership){
+	      $result[] = CHtml::link(CHtml::encode($membership->endDate),
+                            array('membership/view','id'=>$membership->idMembership));
+	    }
+	  }
+	  else{
+	    $result[] = "No memberships on file";
+	  }
+	  return implode(", ",$result);
+
+	}
         
  }

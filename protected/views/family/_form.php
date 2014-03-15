@@ -86,7 +86,35 @@
             </div>
 	</div>
             
-
+	<div class="row">
+            <div class="large-12 columns">
+		<?php echo $form->labelEx($entity,'people'); ?>
+		<?php //echo $form->checkBoxList(
+                //$model,
+                //'people',
+                //CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName'),
+                //array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))); 
+                ?>
+		<?php echo $form->dropDownList(
+                        $entity,
+                        'people',
+                        CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName', 'lastName'),
+                        array('prompt' => 'Select People', 'multiple' => 'multiple')); ?>
+                <?php /*$this->widget('ext.select2.ESelect2',array(
+                     'model'=>$entity,  
+                     'attribute'=>'people',
+                     'data'=>CHtml::listData(Person::model()->findAll(), 'idPerson', 'firstName', 'lastName'),
+                    'htmlOptions'=>array(
+                        'multiple' => 'multiple',
+                    ), 
+                    'options'=>array(
+                         'width'        => '100%',
+                         'placeholder'  => 'Type a name'
+                     ),
+                     )); */?>
+		<?php echo $form->error($entity,'people'); ?>
+            </div>
+        </div>
 
             
 	</div>

@@ -49,7 +49,24 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'firstName',
 		'lastName',
 		'birthDate',
-		'personTypeId',
+		//'personTypeId',
+                // below leads to error 'Trying to get property of non-object'
+                //array('name'=>'personTypeSearch', 'value'=>$model->personType->name),
+                array(
+		      // definitely need the search variable name here
+		      'name'=>'personTypeSearch', 
+		      // I read that this might be necessary if I have empty fields
+		      // I do not here since personType is required
+		      //'value'=>'$data->personType!==null?$data->personType->Name:"None"',
+		      'value'=>'$data->personType->Name',
+		      // This filter change is important as it allows comparison by name, not id
+                    //'filter'=>CHtml::listData(PersonType::model()->findAll(),'idPersonType','Name'),),
+		      // this works giving a nice drop down menu
+                    //'filter'=>CHtml::listData(PersonType::model()->findAll(),'Name','Name'),
+		      // this works, matching the other search boxes
+		      'filter'=>CHtml::activeTextField($model,'personTypeSearch'),
+		      ),
+                
 		'email',
 		/*
 		'phone',

@@ -4,7 +4,7 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
+<div class="form panel">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'visit-form',
@@ -18,6 +18,7 @@
 <!-- visitDateTime field not needed due to timestamp rule in Visit model -->
 
         <div class="row">
+            <div class="large-6 columns">
             <?php echo $form->labelEx($model,'entityId'); ?>
                 <?php $this->widget('ext.select2.ESelect2',array(
                      'model'=>$model,  
@@ -69,6 +70,26 @@
 		 */ ?>
 
 		<?php echo $form->error($model,'entityId'); ?>
+            </div>
+            <div class="large-6 columns">
+		<?php echo $form->labelEx($model,'destinationEventId'); ?>
+                <?php $this->widget('ext.select2.ESelect2',
+                        array('model'=>$model,
+                            'attribute'=>'destinationEventId',
+                            'data'=>CHtml::listData(Event::model()->findAll(), 'idEvent', 'name'),
+                            'options'=>array('width'=>'100%',
+                                'placeholder'=>'Select an Event',
+                                ),
+                            )
+                        );
+                ?>
+		<?php /* changed to select search field above
+			echo $form->dropDownList($model,'destinationEventId',
+                        CHtml::listData(Event::model()->findAll(), 'idEvent', 'description'),
+                        array('prompt' => 'Select an Event')
+			); */ ?>
+		<?php echo $form->error($model,'destinationEventId'); ?>
+            </div>
         </div>
 
 <!--	<div class="row">
@@ -85,36 +106,19 @@
 	</div>-->
 
 	<div class="row">
+            <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'numberOfGuests'); ?>
-	<?php echo $form->textField($model,'numberOfGuests',array('value'=>1)); ?>
+                <?php echo $form->textField($model,'numberOfGuests',array('value'=>1)); ?>
 		<?php echo $form->error($model,'numberOfGuests'); ?>
-	</div>
+            </div>
 
-	<div class="row">
+            <div class="large-6 columns">
 		<?php echo $form->labelEx($model,'amountPaid'); ?>
-	<?php echo $form->textField($model,'amountPaid',array('size'=>10,'maxlength'=>10,'value'=>"3.5")); ?>
+                <?php echo $form->textField($model,'amountPaid',array('size'=>10,'maxlength'=>10,'value'=>"3.5")); ?>
 		<?php echo $form->error($model,'amountPaid'); ?>
+            </div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'destinationEventId'); ?>
-	<?php $this->widget('ext.select2.ESelect2',
-			   array('model'=>$model,
-				 'attribute'=>'destinationEventId',
-				 'data'=>CHtml::listData(Event::model()->findAll(), 'idEvent', 'description'),
-				 'options'=>array('width'=>'100%',
-						  'placeholder'=>'Select an Event',
-						  ),
-				 )
-			   ); 
-	?>
-		<?php /* changed to select search field above
-			echo $form->dropDownList($model,'destinationEventId',
-                        CHtml::listData(Event::model()->findAll(), 'idEvent', 'description'),
-                        array('prompt' => 'Select an Event')
-			); */ ?>
-		<?php echo $form->error($model,'destinationEventId'); ?>
-	</div>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

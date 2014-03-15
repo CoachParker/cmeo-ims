@@ -23,12 +23,12 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'personId'); ?>
-		<?php echo $form->textField($model,'personId'); ?>
+		<?php echo $form->textField($model,'personSearch'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'roleId'); ?>
-		<?php echo $form->textField($model,'roleId'); ?>
+		<?php echo $form->textField($model,'roleSearch'); ?>
 	</div>
 
 	<div class="row buttons">

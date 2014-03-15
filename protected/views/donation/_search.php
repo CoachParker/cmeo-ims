@@ -17,8 +17,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'entityId'); ?>
-		<?php echo $form->textField($model,'entityId'); ?>
+		<?php echo $form->label($model,'entitySearch'); ?>
+		<?php echo $form->textField($model,'entitySearch'); ?>
 	</div>
 
 	<div class="row">
@@ -32,8 +32,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'donationReasonId'); ?>
-		<?php echo $form->textField($model,'donationReasonId'); ?>
+		<?php echo $form->label($model,'reasonSearch'); ?>
+		<?php echo $form->textField($model,'reasonSearch'); ?>
 	</div>
 
 	<div class="row">

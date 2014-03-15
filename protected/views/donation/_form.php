@@ -19,7 +19,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-            <div class="large-12 columns">
+            <div class="large-8 columns">
 		<?php echo $form->labelEx($model,'entityId'); ?>
 		<?php //echo $form->dropDownList(
                         //$model,
@@ -32,12 +32,16 @@
                      'attribute'=>'entityId',
                      'data'=>CHtml::listData(Entity::model()->findAll(), 'idEntity', 'name'),
                      'options'=>array(
+                     	'allowClear' => TRUE,
                          'width'              => '100%',
                          'placeholder'  => 'Type a name'
                          ),
                      )); 
                 ?>
 		<?php echo $form->error($model,'entityId'); ?>
+            </div>
+            <div class='large-4 columns'>
+                <a class="button" href="<?php echo Yii::app()->request->baseUrl; ?>/entity/newDonor">New Donor</a>
             </div>
 	</div>
   

@@ -21,25 +21,40 @@
 
 	<div class="panel">
 	<div class="row">
-        <div class="large-4 columns">
+            <div class="large-4 columns">
 		<?php echo $form->labelEx($eventType,'eventType'); ?>
 		<?php echo $form->textField($eventType,'eventType',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($eventType,'eventType'); ?>
-	</div>
+            </div>
 
-       <div class="large-4 columns">
+            <div class="large-4 columns">
 		<?php echo $form->labelEx($eventType,'displayName'); ?>
 		<?php echo $form->textField($eventType,'displayName',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($eventType,'displayName'); ?>
-	</div>
+            </div>
 
-       <div class="large-4 columns">
+            <div class="large-4 columns">
 		<?php echo $form->labelEx($eventType,'description'); ?>
 		<?php echo $form->textField($eventType,'description',array('size'=>45,'maxlength'=>45)); ?>
 		<?php echo $form->error($eventType,'description'); ?>
-	</div>
+            </div>
         </div>
             
+        <div class="row">
+            <div class="large-12 columns">
+		<?php echo CHtml::label('Existing Attributes',false) 
+                //$form->labelEx($eventType,'eventAttributes'); 
+                ?>
+		<?php //echo $form->checkBoxList($model,'entities',CHtml::listData(Entity::model()->findAll(), 'ID', 'Name'),array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))); ?>
+		<?php echo $form->dropDownList(
+                        $eventType,
+                        'eventAttributes',
+                        CHtml::listData(EventAttribute::model()->findAll(), 'idEventAttribute', 'displayName'),
+                        array('multiple' => 'multiple')
+                        ); ?>
+		<?php echo $form->error($eventType,'eventAttributes'); ?>              
+            </div>
+        </div>
         </div>
 
 
@@ -73,7 +88,7 @@ $this->widget('ext.multimodelform.MultiModelForm',array(
         'formConfig' => $memberFormConfig, //the form configuration array
         'model' => $member, //instance of the form model
         'tableView' => true,
-    'addItemText' => 'Add Attributes',
+    'addItemText' => 'Add New Attributes',
     'addItemAsButton' => true,
     'hideCopyTemplate' => FALSE,
  

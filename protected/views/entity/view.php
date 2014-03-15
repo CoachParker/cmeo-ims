@@ -32,6 +32,16 @@ $this->menu=array(
                 'value' => $model->getPersonList(),
                 'type' => 'raw'
                 ),
+            array(
+                'label' => 'Memberships',
+                'value' => $model->getMemberDates(),
+                'type' => 'raw'
+            ),
+            array(
+                'label' => 'Donations',
+                'value' => $model->getDonations(),
+                'type' => 'raw'
+            ),
 		'address1',
 		'address2',
 		'city',

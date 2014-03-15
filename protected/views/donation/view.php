@@ -18,14 +18,26 @@ $this->menu=array(
 
 <h1>View Donation #<?php echo $model->idDonation; ?></h1>
 
+<?php
+	$contact = "";
+	if(isset($model->personContact))
+	{
+		$contact =  CHtml::link(CHtml::encode($model->personContact->firstName . " " . $model->personContact->lastName),
+		array('person/view','id'=>$model->contactPerson));
+		}
+
+?>
+
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'idDonation',
-                array(
-                    'label' => 'Entity',
-                    'value' => $model->entity->name,
-                ),
+		array(
+			'label'=>'Entity',
+			'value' => CHtml::link(CHtml::encode($model->entity->name),
+                            array('entity/view','id'=>$model->entity->idEntity)),
+                                    'type' => 'raw',
+		),
 		'donationDate',
 		'amount',
                 array(
@@ -34,8 +46,7 @@ $this->menu=array(
                 ),
                 array(
                     'label' => 'Contact Person',
-                    'value' => CHtml::link(CHtml::encode($model->personContact->firstName . " " . $model->personContact->lastName),
-                            array('person/view','id'=>$model->contactPerson)),
+                    'value' => $contact,
                     'type'  => 'raw',
                 ),
 		'isThanked',

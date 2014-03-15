@@ -16,6 +16,9 @@
  */
 class User extends CActiveRecord
 {
+  // search variables for CGridView
+  public $personSearch;
+  public $roleSearch;
 	// Needed for user registration
 	public $passwordCompare;	
 	
@@ -54,7 +57,7 @@ class User extends CActiveRecord
 			array('passwordCompare', 'compare','compareAttribute'=>'password','message'=>"Passwords don't match."),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('idUser, username, password, personId, roleId', 'safe', 'on'=>'search'),
+			array('idUser, username, password, personId, personSearch, roleId, roleSearch', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +71,7 @@ class User extends CActiveRecord
 		return array(
 			'person' => array(self::BELONGS_TO, 'Person', 'personId'),
 			'role' => array(self::BELONGS_TO, 'Role', 'roleId'),
+                        'member' => array(self::HAS_MANY, 'Membership','enteredBy'),
 		);
 	}
 
@@ -82,6 +86,8 @@ class User extends CActiveRecord
 			'password' => 'Password',
 			'personId' => 'Person',
 			'roleId' => 'Role',
+			'personSearch' => 'Person',
+			'roleSearch' => 'Role',
 		);
 	}
 
@@ -95,15 +101,31 @@ class User extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->with = array('person','role');
 
 		$criteria->compare('idUser',$this->idUser);
 		$criteria->compare('username',$this->username,true);
-		$criteria->compare('password',$this->password,true);
-		$criteria->compare('personId',$this->personId);
-		$criteria->compare('roleId',$this->roleId);
+		//		$criteria->compare('password',$this->password,true);
+		$criteria->compare('person.firstName',$this->personSearch,true);
+		//		$criteria->compare('personId',$this->personId);
+		$criteria->compare('role.name',$this->roleSearch,true);
+		//		$criteria->compare('roleId',$this->roleId);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'sort'=>array(
+                            'attributes'=>array(
+                                'personSearch'=>array(
+                                    'asc'=>'person.firstName',
+                                    'desc'=>'person.firstName DESC'
+                                    ),
+                                'roleSearch'=>array(
+                                    'asc'=>'role.name',
+                                    'desc'=>'role.name DESC'
+                                    ),
+                                '*',
+                                ),
+                        ),
 		));
 	}
 

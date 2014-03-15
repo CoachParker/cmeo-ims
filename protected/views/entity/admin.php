@@ -47,7 +47,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'idEntity',
 		'name',
-		'entityTypeId',
+		array('name'=>'entityType.name',
+		      'value'=>'$data->entityType->name',
+		      'filter'=>CHtml::activeTextField($model,'entityTypeSearch'),
+
+		      ),
 		'address1',
 		'address2',
 		'city',

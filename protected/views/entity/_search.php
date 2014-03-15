@@ -22,8 +22,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'entityTypeId'); ?>
-		<?php echo $form->textField($model,'entityTypeId'); ?>
+		<?php echo $form->label($model,'entityTypeSearch'); ?>
+		<?php echo $form->textField($model,'entityTypeSearch'); ?>
 	</div>
 
 	<div class="row">

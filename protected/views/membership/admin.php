@@ -46,13 +46,30 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'idMembership',
-		'entityId',
+            // changed entityId to entity.name
+            //    'entity.name',
+        array(
+            'name'=>'entity_search',
+            'value'=>'$data->entity->name',
+            'filter'=>CHtml::activeTextField($model,'entity_search'),
+        ),
+                //array( 
+               //     'name'=>'entity.name',
+              //      'name'=>'entity_search',
+             //       'value'=>entity.name
+            //        'value'=>'(isset($model->entity->name)) ? $model->entity->name : ""' 
+               // ),   
 		'startDate',
 		'endDate',
-		'typeId',
+		//		'typeId',
+		array(
+		      'name'=>'membershipTypeSearch',
+		      'value'=>'$data->type->name',
+		      'filter'=>CHtml::activeTextField($model,'membershipTypeSearch'),
+),
 		'amountPaid',
-		/*
 		'enteredBy',
+		/*
 		'createDate',
 		'comments',
 		*/

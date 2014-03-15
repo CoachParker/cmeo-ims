@@ -78,17 +78,13 @@ class EventController extends Controller
 		$eventType=new EventType;
 		$member=new EventAttribute;
 		$validatedMembers = array(); // ensure an empty array
-		$attr = array(); 
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Event']))
 		{
-		  if(isset($_POST['Event']['attributes']))
-		    {
-		      $attr = $_POST['Event']['attributes'];
-		    }
+			$attr = $_POST['Event']['attributes'];
 			$model->attributes=$_POST['Event'];
 			if($model->save()) {
 				$this->addAttributes($attr, $model);
@@ -144,8 +140,8 @@ class EventController extends Controller
                                     $eventTypeAttribute->eventTypeId = $eventType->idEventType;
                                     if(!$eventTypeAttribute->save()) print_r($eventTypeAttribute->errors);  
                                 }
-                                //$this->refresh();
-                                $this->redirect(array('eventType/view','id'=>$eventType->idEventType));
+                                $this->refresh();
+                                //$this->redirect(array('eventType/view','id'=>$eventType->idEventType));
                             }
                         }	
                         

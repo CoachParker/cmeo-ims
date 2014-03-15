@@ -237,6 +237,52 @@ class VisitController extends Controller
                  echo $e->getMessage();
              }
        }
+/*
+ * Playing with dependent drop down lists
+ * The following is from the yii forum
+ * I was planning to use it in the related view, dep_drop_ex
+ */
+ 
+public function actionSelectcounty(){ 
+    echo $_POST['RamCity']['con_id'];
+    $listdata = RamCountry::model()->findAll('con_id=:contryid',
+        array(':contryid'=>(int)$_POST['RamCity']['con_id'])); 
+    
+    $listdata = CHtml::listData($listdata,'c_id','description');
+    
+    echo CHtml::tag('option',array('value'=>''),'select Country',true);
+    
+    foreach($listdata as $value => $description){
+        echo CHtml::tag('option',
+                array('value'=>$value),CHtml::encode($description),true);
+        }
+}
 
-        
+public function actionSelectState(){
+    $listdata = RamState::model()->findAll('c_id=:contryid',array(':contryid'=>(int)$_POST['RamCity']['c_id']));
+    
+    $listdata = CHtml::listData($listdata,'s_id','description');
+    
+    echo CHtml::tag('option',array('value'=>''),'select State',true);
+    
+    foreach($listdata as $value => $description){
+        echo CHtml::tag('option',
+                array('value'=>$value),CHtml::encode($description),true);
+        }
+}
+                
+public function actionSelectCity(){
+    $listdata = RamCity::model()->findAll('s_id=:contryid',array(':contryid'=>(int)$_POST['RamCity']['s_id']));
+    
+    $listdata = CHtml::listData($listdata,'ct_id','description');
+    
+    echo CHtml::tag('option',array('value'=>''),'select City',true);
+    
+    foreach($listdata as $value => $description){
+        echo CHtml::tag('option',
+                array('value'=>$value),CHtml::encode($description),true);
+        }
+}
+       
+       
 }

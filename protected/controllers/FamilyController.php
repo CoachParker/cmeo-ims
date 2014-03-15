@@ -73,7 +73,7 @@ class FamilyController extends Controller
 	 */
 	public function actionCreate()
 	{
-            //var_dump( $_POST ); 
+            var_dump( $_POST ); 
             //Yii::trace('<pre>'.print_r( $_POST,1 ).'</pre>');
             Yii::import('ext.multimodelform.MultiModelForm');
  

@@ -22,12 +22,21 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'idMembership',
-		'entityId',
+                array(
+                    'label' => 'Entity',
+                    'value' => $model->entity->name,
+                ),
 		'startDate',
 		'endDate',
-		'typeId',
-		'amountPaid',
-		'enteredBy',
+                array(
+                    'label' => 'Type',
+                    'value' => $model->type->name,
+                ),
+                'amountPaid',
+                array(
+                    'label' => 'Entered by',
+                    'value' => $model->staff->username,
+                ),
 		'createDate',
 		'comments',
 	),

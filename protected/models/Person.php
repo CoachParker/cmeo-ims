@@ -23,6 +23,7 @@
  */
 class Person extends CActiveRecord
 {
+    public $personTypeSearch;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -56,7 +57,7 @@ class Person extends CActiveRecord
 			array('birthDate, comments, entities, visits', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('idPerson, firstName, lastName, birthDate, personTypeId, email, phone, comments, doNotContact', 'safe', 'on'=>'search'),
+			array('idPerson, firstName, lastName, birthDate, personTypeId, personType.Name, personTypeSearch, email, phone, comments, doNotContact', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,10 +96,12 @@ class Person extends CActiveRecord
 			'lastName' => 'Last Name',
 			'birthDate' => 'Birth Date',
 			'personTypeId' => 'Person Type',
+                        'personType.Name' => 'Type',
+                        'personTypeSearch' => 'Type',
 			'email' => 'Email',
 			'phone' => 'Phone',
 			'comments' => 'Comments',
-                    'entities' => 'Entities',
+                        'entities' => 'Entities',
 			'doNotContact' => 'Do Not Contact',
 		);
 	}
@@ -113,12 +116,14 @@ class Person extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+                $criteria->with = array('personType');
+                $criteria->together = true;
 
 		$criteria->compare('idPerson',$this->idPerson);
 		$criteria->compare('firstName',$this->firstName,true);
 		$criteria->compare('lastName',$this->lastName,true);
 		$criteria->compare('birthDate',$this->birthDate,true);
-		$criteria->compare('personTypeId',$this->personTypeId);
+		$criteria->compare('personType.Name',$this->personTypeSearch, true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('comments',$this->comments,true);
@@ -127,6 +132,15 @@ class Person extends CActiveRecord
                 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+                        'sort'=>array(
+                            'attributes'=>array(
+                                'personTypeSearch'=>array(
+                                    'asc'=>'personType.Name',
+                                    'desc'=>'personType.Name DESC'
+                                    ),
+                                '*',
+                                ),
+                        ),
 		));
 	}
 

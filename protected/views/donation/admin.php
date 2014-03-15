@@ -46,11 +46,25 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'idDonation',
-		'entityId',
+//		'entityId',
+		array('name'=>'entitySearch',
+			'value'=>'$data->entity->name',
+			'filter'=>CHtml::activeTextField($model,'entitySearch'),
+		),
 		'donationDate',
 		'amount',
-		'donationReasonId',
+//		'donationReasonId',
+		array('name'=>'reasonSearch',
+			'value'=>'$data->donationReason->name',
+			'filter'=>CHtml::activeTextField($model,'reasonSearch'),
+		),
 		'isThanked',
+		'contactPerson',
+//		array('name'=>'contactSearch',
+//			'value'=>'$data->personContact->firstName',
+//			'filter'=>CHtml::activeTextField($model,'contactSearch'),
+//		),
+
 		/*
 		'comments',
 		*/

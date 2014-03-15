@@ -12,6 +12,9 @@
  * @property integer $contactPerson
  * @property integer $isThanked
  * @property string $comments
+ * 
+ * @property string $entitySearch
+ * @property string $reasonSearch
  *
  * The followings are the available model relations:
  * @property Entity $entity
@@ -20,6 +23,9 @@
  */
 class Donation extends CActiveRecord
 {
+	public $entitySearch;
+	public $reasonSearch;
+	public $contactSearch;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -52,7 +58,7 @@ class Donation extends CActiveRecord
 			array('comments, entity', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('idDonation, entityId, donationDate, amount, donationReasonId, isThanked, comments', 'safe', 'on'=>'search'),
+			array('idDonation, entityId, entitySearch, donationDate, amount, donationReasonId, reasonSearch, contactSearch, isThanked, comments', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +72,7 @@ class Donation extends CActiveRecord
 		return array(
 			'entity' => array(self::BELONGS_TO, 'Entity', 'entityId'),
 			'donationReason' => array(self::BELONGS_TO, 'DonationReason', 'donationReasonId'),
-                        'personContact' => array(self::BELONGS_TO, 'Person', 'contactPerson'),
+         'personContact' => array(self::BELONGS_TO, 'Person', 'contactPerson'),
 		);
 	}
 
@@ -78,10 +84,13 @@ class Donation extends CActiveRecord
 		return array(
 			'idDonation' => 'Iddonation',
 			'entityId' => 'Entity',
+			'entitySearch' => 'Entity',
 			'donationDate' => 'Donation Date',
 			'amount' => 'Amount',
 			'donationReasonId' => 'Donation Reason',
-                        'contactPerson' => 'Contact Person',
+			'reasonSearch' => 'Donation Reason',
+         'contactPerson' => 'Appeal Person',
+         'contactSearch' => 'Appeal Person',
 			'isThanked' => 'Is Thanked',
 			'comments' => 'Comments',
 		);
@@ -97,18 +106,39 @@ class Donation extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
+		$criteria->with=array('entity','donationReason');
 
 		$criteria->compare('idDonation',$this->idDonation);
-		$criteria->compare('entityId',$this->entityId);
-		$criteria->compare('contactPerson',$this->contactPerson);
+//$criteria->compare('entityId',$this->entityId);
+		$criteria->compare('entity.name',$this->entitySearch,true);
+//		$criteria->compare('contactPerson',$this->contactPerson);
 		$criteria->compare('donationDate',$this->donationDate,true);
 		$criteria->compare('amount',$this->amount,true);
-		$criteria->compare('donationReasonId',$this->donationReasonId);
+//		$criteria->compare('donationReasonId',$this->donationReasonId);
+		$criteria->compare('donationReason.name',$this->reasonSearch,true);
 		$criteria->compare('isThanked',$this->isThanked);
+//		$criteria->compare('personContact.firstName',$this->contactSearch,true);
 		$criteria->compare('comments',$this->comments,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			 'sort'=>array(
+                        'attributes'=>array(
+                            'entitySearch'=>array(
+                                'asc'=>'entity.name',
+                                'desc'=>'entity.name DESC',
+                                ),
+                             'reasonSearch'=>array(
+                             		'asc'=>'donationReason.name',
+                             		'desc'=>'donationReason.name DESC',
+                             		),
+//                             'contactSearch'=>array(
+//                             		'asc'=>'personContact.firstName',
+//                             		'desc'=>'personContact.firstName DESC',
+//                             		),
+                            '*',
+                            ),
+                        ),
 		));
 	}
 }

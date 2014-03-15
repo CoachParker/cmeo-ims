@@ -14,6 +14,9 @@
  * @property string $zip
  * @property string $phone
  * @property string $comments
+ * 
+ * a variable to store the entityType name for searching
+ * @property string $entityTypeSearch
  *
  * The followings are the available model relations:
  * @property Donation[] $donations
@@ -25,6 +28,8 @@
  */
 class Entity extends CActiveRecord
 {
+    public $entityTypeSearch;
+    
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -52,7 +57,7 @@ class Entity extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, entityTypeId', 'required'),
-                    array('name', 'unique'),
+         array('name', 'unique'),
 			array('entityTypeId', 'numerical', 'integerOnly'=>true),
 			array('name, city', 'length', 'max'=>45),
 			array('address1, address2', 'length', 'max'=>80),
@@ -62,7 +67,7 @@ class Entity extends CActiveRecord
 			array('comments, people', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('idEntity, name, entityTypeId, address1, address2, city, state, zip, phone, comments', 'safe', 'on'=>'search'),
+			array('idEntity, name, entityTypeId, entityTypeSearch, entityType.name, address1, address2, city, state, zip, phone, comments', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -100,6 +105,8 @@ class Entity extends CActiveRecord
 			'idEntity' => 'Id Entity',
 			'name' => 'Name',
 			'entityTypeId' => 'Entity Type',
+         'entityType.name' => 'Type',
+         'entityTypeSearch' => 'Type',
 			'address1' => 'Address1',
 			'address2' => 'Address2',
 			'city' => 'City',
@@ -120,10 +127,12 @@ class Entity extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-
+                $criteria->with = array('entityType');
+                $criteria->together = true;
+                
 		$criteria->compare('idEntity',$this->idEntity);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('entityTypeId',$this->entityTypeId);
+		$criteria->compare('`t`.`name`',$this->name,true);
+		$criteria->compare('entityType.name',$this->entityTypeSearch,true);
 		$criteria->compare('address1',$this->address1,true);
 		$criteria->compare('address2',$this->address2,true);
 		$criteria->compare('city',$this->city,true);
@@ -135,7 +144,16 @@ class Entity extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-		));
+                        'sort'=>array(
+                            'attributes'=>array(
+                                'entityTypeSearch'=>array(
+                                    'asc'=>'entityType.name',
+                                    'desc'=>'entityType.name DESC'
+                                    ),
+                                '*',
+                                ),
+                        ),
+                    ));
 	}
         
         
@@ -158,4 +176,42 @@ class Entity extends CActiveRecord
             }
         return implode(", ",$result);
         }
+        
+	/*
+	* @return string membership end date
+	*/
+
+	public function getMemberDates()
+	{
+	  $result=array();
+	  if (count($this->memberships) > 0){
+	    foreach ($this->memberships as $membership){
+	      $result[] = CHtml::link(CHtml::encode($membership->endDate),
+                            array('membership/view','id'=>$membership->idMembership));
+	    }
+	  }
+	  else{
+	    $result[] = "No memberships on file";
+	  }
+	  return implode(", ",$result);
+	}
+        
+	/*
+	* @return string donations
+	*/
+
+	public function getDonations()
+	{
+	  $result=array();
+	  if (count($this->donations) > 0){
+	    foreach ($this->donations as $donation){
+	      $result[] = CHtml::link(CHtml::encode("$".$donation->amount),
+                            array('donation/view','id'=>$donation->idDonation));
+	    }
+	  }
+	  else{
+	    $result[] = "No donations on file";
+	  }
+	  return implode(", ",$result);
+	}        
 }

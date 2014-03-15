@@ -23,7 +23,7 @@ $this->menu=array(
 	'attributes'=>array(
 		'idUser',
 		'username',
-		'password',
+		//'password',
 		array(
 			'label'=>'Person',
 			'value' => CHtml::link(CHtml::encode($model->person->firstName . " " . $model->person->lastName),

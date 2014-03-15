@@ -32,7 +32,7 @@ class EntityController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user with role to perform most actions
-			      'actions'=>array('index','view','create','update','admin','register','register2'),
+			      'actions'=>array('index','view','create','update','admin','register','register2','newdonor'),
 				'users'=>array('@'),
 				'expression'=>'isset($user->type) && 
 				(($user->type==="admin") || 
@@ -240,6 +240,53 @@ class EntityController extends Controller
                  }
 	    $this->render('register2', array('entity'=>$entityModel,
 					     'person'=>$personModel,));
+                    
+                 }
+
+   /*
+    * Attempting a form with multiple models
+    * CActiveForm
+    * Gary 2014-01-13
+    */     
+        public function actionNewDonor()
+                {
+            //var_dump( $_POST ); 
+            
+            $entity = new Entity;
+            $person = new Person;
+	    $donate = new Donation;
+            if(isset($_POST['Entity']))
+                {
+                $entity->attributes=$_POST['Entity'];
+                $person->attributes=$_POST['Person'];
+                $donate->attributes=$_POST['Donation'];
+                
+                if($entity->save())
+                    {
+                    // finally! this works with CAdvandcedArBehavior
+                  
+                     $person->entities=$entity->idEntity;
+                     $donate->entityId=$entity->idEntity;
+                     
+                     //var_dump( $donate ); 
+                    // Need to loop through the extra people from jqrelcopy, 
+		    // but not sure how yet 2014-01-13
+		      /*
+                    foreach ($person->id as $personi)
+                    {
+                        $personi->entities=$entity->idEntity;
+                        $personi->save(false);
+                    }
+		      */
+		     
+                    $person->save();
+                    $donate->save();
+                    $this->redirect(array('view','id'=>$entity->idEntity));
+                    }   
+                 }
+	    $this->render('newDonor', array('entity'=>$entity,
+					    'person'=>$person,
+					    'donate'=>$donate));
                     
                  }
 

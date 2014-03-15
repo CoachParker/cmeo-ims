@@ -195,7 +195,20 @@
                     <?php echo $form->error($eventType,'description'); ?>
             </div>
         </div>
-
+        <div class="row">
+            <div class="large-12 columns">
+		<?php echo CHtml::label('Existing Attributes',false) 
+                //$form->labelEx($eventType,'eventAttributes'); 
+                ?>
+		<?php echo $form->dropDownList(
+                        $eventType,
+                        'eventAttributes',
+                        CHtml::listData(EventAttribute::model()->findAll(), 'idEventAttribute', 'displayName'),
+                        array('multiple' => 'multiple')
+                        ); ?>
+		<?php echo $form->error($eventType,'eventAttributes'); ?>              
+            </div>
+        </div>
     </div>
 
 
@@ -229,7 +242,7 @@
         'formConfig' => $memberFormConfig, //the form configuration array
         'model' => $member, //instance of the form model
         'tableView' => true,
-        'addItemText' => 'Add Attributes',
+        'addItemText' => 'Add New Attributes',
         'addItemAsButton' => true,
         'hideCopyTemplate' => false,
 
@@ -268,8 +281,6 @@
     </div>
 
 </div>
-
-<a href="#" class="small button" data-reveal-id="myModal">Add New Event Type</a>
 
 
 <?php $this->endWidget(); ?>

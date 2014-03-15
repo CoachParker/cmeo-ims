@@ -26,7 +26,10 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('contactPerson')); ?>:</b>
-	<?php echo CHtml::encode($data->personContact->firstName); ?>
+	<?php 
+	$contact = "";
+	if(isset($data->personContact)) {$contact=$data->personContact->firstName;}
+	echo CHtml::encode($contact); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('isThanked')); ?>:</b>

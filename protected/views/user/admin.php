@@ -47,9 +47,18 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'idUser',
 		'username',
-		'password',
-		'personId',
-		'roleId',
+		//'password',
+		array(
+		      'name' => 'personSearch',
+		      'value' => '$data->person->firstName',
+		      'filter' => CHtml::activeTextField($model,'personSearch'),
+		      ),
+		array(
+		      'name' => 'roleSearch',
+		      'value' => '$data->role->name',
+		      'filter' => CHtml::activeTextField($model,'roleSearch'),
+		      ),
+		//'roleId',
 		array(
 			'class'=>'CButtonColumn',
 		),

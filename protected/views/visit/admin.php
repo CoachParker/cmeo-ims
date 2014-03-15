@@ -47,10 +47,18 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'idVisit',
 		'visitDateTime',
-		'entityId',
+		array(
+                    'name' => 'entitySearch',
+                    'value' => '$data->entity->name',
+                    'filter' => CHtml::activeTextField($model, 'entitySearch'),
+                ),
 		'numberOfGuests',
 		'amountPaid',
-		'destinationEventId',
+		array(
+                    'name' => 'destinationSearch',
+                    'value' => '$data->destinationEvent->name',
+                    'filter' => CHtml::activeTextField($model, 'destinationSearch'),
+                ),
 		array(
 			'class'=>'CButtonColumn',
 		),

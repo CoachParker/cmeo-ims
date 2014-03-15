@@ -13,10 +13,19 @@
 	<?php echo CHtml::encode($data->name); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('eventTypeId')); ?>:</b>
+	<?php echo CHtml::encode($data->eventType->displayName); ?>
+	<br />
+        
 	<b><?php echo CHtml::encode($data->getAttributeLabel('eventDate')); ?>:</b>
 	<?php echo CHtml::encode($data->eventDate); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
+	<?php echo CHtml::encode($data->description); ?>
+	<br />
+
+	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('endDate')); ?>:</b>
 	<?php echo CHtml::encode($data->endDate); ?>
 	<br />
@@ -29,17 +38,8 @@
 	<?php echo CHtml::encode($data->classLimit); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
-	<?php echo CHtml::encode($data->description); ?>
-	<br />
-
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('ageGroupId')); ?>:</b>
 	<?php echo CHtml::encode($data->ageGroupId); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('eventTypeId')); ?>:</b>
-	<?php echo CHtml::encode($data->eventTypeId); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('notes')); ?>:</b>

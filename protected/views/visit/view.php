@@ -23,10 +23,17 @@ $this->menu=array(
 	'attributes'=>array(
 		'idVisit',
 		'visitDateTime',
-                array(
-                    'label' => 'Entity',
-                    'value' => $model->entity->name,
-                ),
+		array(
+			'label'=>'Entity',
+			'value' => CHtml::link(CHtml::encode($model->entity->name),
+                            array('entity/view','id'=>$model->entity->idEntity)),
+                                    'type' => 'raw',
+		),
+		array(
+		      'label' => 'Membership expiration',
+		      'value' => $model->getMemberDates(),
+		      'type'  => 'raw'
+		      ),
 		'numberOfGuests',
 		'amountPaid',
                 array(

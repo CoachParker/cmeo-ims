@@ -10,7 +10,7 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('entityId')); ?>:</b>
-	<?php echo CHtml::encode($data->entityId); ?>
+	<?php echo CHtml::encode($data->entity->name); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('startDate')); ?>:</b>
@@ -22,7 +22,7 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('typeId')); ?>:</b>
-	<?php echo CHtml::encode($data->typeId); ?>
+	<?php echo CHtml::encode($data->type->name); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('amountPaid')); ?>:</b>
@@ -30,7 +30,7 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('enteredBy')); ?>:</b>
-	<?php echo CHtml::encode($data->enteredBy); ?>
+	<?php echo CHtml::encode($data->staff->person->firstName); ?>
 	<br />
 
 	<?php /*

@@ -32,7 +32,7 @@ $this->pageTitle=Yii::app()->name;
         </div>
     </div>
 </div>
-
+<!--
 <div class="row">
    <ul class="button-group round even-4">
     <li> <a href="<?php echo Yii::app()->request->baseUrl; ?>/visit" class="button">Visits</a> </li>
@@ -49,7 +49,7 @@ $this->pageTitle=Yii::app()->name;
     <li> <a href="<?php echo Yii::app()->request->baseUrl; ?>/membershipType" class="button">Membership Types</a> </li>
   </ul>
 </div>
-
+-->
 <!--
 <p>Congratulations! You have successfully created your Yii application.</p>
 

@@ -33,7 +33,13 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'personTypeId'); ?>
-		<?php echo $form->textField($model,'personTypeId'); ?>
+		<?php //echo $form->textField($model,'personType.Name'); ?>
+            		<?php echo $form->radioButtonList(
+                        $model,
+                        'personTypeSearch',
+                        CHtml::listData(PersonType::model()->findAll(), 'Name', 'Name'),
+                        array('separator'=>'&nbsp; &nbsp;','labelOptions'=>array('style'=>'display:inline'))
+                        ); ?>
 	</div>
 
 	<div class="row">
